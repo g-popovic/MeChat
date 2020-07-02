@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const multer = require("multer");
 const path = require("path");
-const mongoose = require("mongoose");
 
 // Image uploading
 const storage = multer.diskStorage({
@@ -87,55 +86,67 @@ router.get("/profile/:userId", async (req, res) => {
 // Send friend request
 router.post("/send-request/:userId", async (req, res) => {
 	const myId = req.body.myId;
+	const otherUserId = req.params.userId;
 
-	try {
-		await Promise.all([
-			User.findByIdAndUpdate(myId, {
-				$push: {
-					friends: {
-						userId: req.params.userId,
-						status: "pending",
-						sentByMe: true
-					}
-				}
-			}),
-			User.findByIdAndUpdate(req.params.userId, {
-				$push: {
-					friends: {
-						userId: myId,
-						status: "pending",
-						sentByMe: false
-					}
-				}
-			})
-		]);
-
-		res.send("Friend request sent!");
-	} catch (err) {
-		res.send(err);
+	// Check if users are already friends or pending
+	const me = await User.findById(myId);
+	if (Boolean(me.friends.find(friend => String(friend.userId) === otherUserId))) {
+		res.status(400).send("Can't send request.");
+		return;
 	}
+
+	// Send request
+	await Promise.all([
+		User.findByIdAndUpdate(myId, {
+			$push: {
+				friends: {
+					userId: otherUserId,
+					status: "pending",
+					sentByMe: true
+				}
+			}
+		}),
+		User.findByIdAndUpdate(otherUserId, {
+			$push: {
+				friends: {
+					userId: myId,
+					status: "pending",
+					sentByMe: false
+				}
+			}
+		})
+	]);
+
+	res.send("Friend request sent!");
 });
 
 // Accept friend request
 router.post("/accept/:userId", async (req, res) => {
 	const myId = req.body.myId;
+	const otherUserId = req.params.userId;
 
-	const [user, me] = await Promise.all([
+	// Validate friend request
+	const me = await User.findById(myId);
+	const otherUser = me.friends.find(friend => String(friend.userId) === otherUserId);
+
+	if (!Boolean(otherUser) || otherUser.sentByMe || otherUser.status !== "pending") {
+		res.status(400).send("Can't accept request.");
+		return;
+	}
+
+	// If request is valid, update Me & otherUsers friends fields
+	const result = await Promise.all([
 		User.updateOne(
-			{ _id: req.params.userId, "friends.userId": myId },
+			{ _id: otherUserId, "friends.userId": myId },
 			{ $set: { "friends.$.status": "friends" } }
 		),
 		User.updateOne(
-			{ _id: myId, "friends.userId": req.params.userId },
+			{ _id: myId, "friends.userId": otherUserId },
 			{ $set: { "friends.$.status": "friends" } }
 		)
 	]);
 
-	if (user.n === 0 || me.n === 0) {
-		res.status(404).send("User not found.");
-	}
-
-	res.send("Accepted.");
+	res.send(result);
 });
 
 // Delete friend
@@ -147,10 +158,9 @@ router.post("/unfriend/:userId", async (req, res) => {
 		User.updateOne({ _id: myId }, { $pull: { friends: { userId: req.params.userId } } })
 	]);
 
-	console.log(user, me);
-
 	if (user.nModified === 0 || me.nModified === 0) {
 		res.status(404).send("User not in friends list.");
+		return;
 	}
 
 	res.send("Deleted.");
@@ -161,11 +171,23 @@ router.get("/friends", async (req, res) => {
 	const myId = req.body.myId;
 
 	const friendIds = (await User.findById(myId)).friends;
+
 	// const friends = await User.find({
-	// 	_id: { $in: [friendIds.map(friendId => friendId.userId)] }
+	// 	_id: { $in: [friendIds.map(friendId => friendId.userId)] },
+	// 	status: "friends"
 	// });
 
 	res.send(friendIds);
+});
+
+// Search for a user
+router.get("/find/:userId", async (req, res) => {
+	const regex = new RegExp(
+		req.params.userId.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\&&"),
+		"gi"
+	);
+	const users = await User.find({ username: regex }).limit(10);
+	res.send(users);
 });
 
 // Upload an avatar for a user

@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const friendSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
+		unique: true,
 		ref: "User"
 	},
-	// Determines if friend is confirmed, pending or requested
 	status: String,
 	sentByMe: Boolean
 });
