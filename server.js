@@ -3,13 +3,24 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user.routes");
+const postRoutes = require("./routes/post.routes");
 const session = require("express-session");
+const cors = require("cors");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
+app.use(
+	cors({
+		credentials: true,
+		origin:
+			process.env.NODE_ENV === "production"
+				? "https://blogme02.herokuapp.com"
+				: "http://localhost:3000"
+	})
+);
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
@@ -22,7 +33,7 @@ app.use(
 mongoose.connect(process.env.ATLAS_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	useCreateIndex: true
+	autoIndex: true
 });
 mongoose.connection.on("open", err => {
 	if (err) console.log(err);
@@ -40,6 +51,7 @@ app.get("/profile", (req, res) => {
 
 // Connect routes
 app.use("/users/", userRoutes);
+app.use("/posts/", postRoutes);
 
 // Run server
 app.listen(process.env.PORT || 5000, (req, res) => {

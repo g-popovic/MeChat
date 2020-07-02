@@ -6,11 +6,21 @@
 		<title>Login Test</title>
 	</head>
 	<body>
-		<form action="http://localhost:5000/users/login" method="POST">
-			<h1>Login</h1>
-			<input name="username" placeholder="Username" type="text" />
+		<form
+			action="http://localhost:5000/posts/like/5efda5f3844a9f4fd86ef7fc"
+			method="POST"
+		>
+			<input name="myId" placeholder="Id" type="text" />
 			<input name="password" placeholder="Password" type="password" />
-			<button type="submit">LOGIN</button>
+			<button type="submit">Like</button>
+		</form>
+		<form
+			action="http://localhost:5000/posts/like/5efda5f3844a9f4fd86ef7fc"
+			method="POST"
+		>
+			<input name="myId" placeholder="Id" type="text" />
+			<input name="password" placeholder="Password" type="password" />
+			<button type="submit">Like</button>
 		</form>
 	</body>
 </html>
