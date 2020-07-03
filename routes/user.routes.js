@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const multer = require("multer");
 const path = require("path");
+const { exit } = require("process");
 
 // Image uploading
 const storage = multer.diskStorage({
@@ -166,18 +167,43 @@ router.post("/unfriend/:userId", async (req, res) => {
 	res.send("Deleted.");
 });
 
-// Get friends list
+// Get a list of friends: each friend containing a username, avatar and id
 router.get("/friends", async (req, res) => {
 	const myId = req.body.myId;
 
-	const friendIds = (await User.findById(myId)).friends;
+	res.send(
+		convertToRelevantUserDate(
+			await User.find({
+				_id: {
+					$in: (await User.findById(myId)).friends.map(friend =>
+						String(friend.userId)
+					)
+				}
+			})
+		)
+	);
+});
 
-	// const friends = await User.find({
-	// 	_id: { $in: [friendIds.map(friendId => friendId.userId)] },
-	// 	status: "friends"
-	// });
+// Get pending friend requests: each request containing a username, avatar and id
+router.get("/requests", async (req, res) => {
+	const myId = req.body.myId;
 
-	res.send(friendIds);
+	res.send(
+		convertToRelevantUserDate(
+			await User.find({
+				_id: {
+					$in: (await User.findById(myId)).friends
+						.reduce((result, friend) => {
+							if (friend.status === "pending" && !friend.sentByMe) {
+								result.push(friend);
+							}
+							return result;
+						}, [])
+						.map(request => String(request.userId))
+				}
+			})
+		)
+	);
 });
 
 // Search for a user
@@ -211,5 +237,13 @@ router.get("/all", (req, res) => {
 		.then(users => res.send(users))
 		.catch(err => res.send(err));
 });
+
+// Convert user document (password, friends-list, etc.)
+// => into relevant information (id, username & avatar)
+function convertToRelevantUserDate(users) {
+	return users.map(user =>
+		Object({ id: user._id, username: user.username, avatar: user.avatar })
+	);
+}
 
 module.exports = router;

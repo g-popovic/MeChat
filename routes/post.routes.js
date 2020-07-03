@@ -31,11 +31,14 @@ router.post("/unlike/:postId", async (req, res) => {
 	res.send("Unliked!");
 });
 
+// Get all posts from a specific user
+router.get("/author/:userId", async (req, res) => {
+	res.send(await Post.find({ author: req.params.userId }).limit(20));
+});
+
 // Get all posts
 router.get("/all", async (req, res) => {
-	const posts = await Post.find().limit(20);
-
-	res.send(posts);
+	res.send(await Post.find().limit(20));
 });
 
 module.exports = router;

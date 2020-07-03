@@ -33,7 +33,7 @@ app.use(
 mongoose.connect(process.env.ATLAS_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	autoIndex: true
+	useCreateIndex: true
 });
 mongoose.connection.on("open", err => {
 	if (err) console.log(err);
