@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #2a2a2a;
+        stroke-width: 2.5px;
+      }
+
+      .cls-1 {
+        stroke-linecap: round;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="Add_Post" data-name="Add Post" transform="translate(-0.138 0)">
+    <g id="Group_7" data-name="Group 7" transform="translate(6.96 6.959)">
+      <line id="Line_11" data-name="Line 11" class="cls-1" y2="16.28" transform="translate(8.118)"/>
+      <line id="Line_12" data-name="Line 12" class="cls-1" y2="16.28" transform="translate(16.28 8.14) rotate(90)"/>
+    </g>
+    <g id="Rectangle_22" data-name="Rectangle 22" class="cls-2" transform="translate(0.138 0)">
+      <rect class="cls-3" width="30" height="30" rx="6"/>
+      <rect class="cls-4" x="1.5" y="1.5" width="27" height="27" rx="4.5"/>
+    </g>
+  </g>
+</svg>

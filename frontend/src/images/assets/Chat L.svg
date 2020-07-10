@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27.577" height="27.577" viewBox="0 0 27.577 27.577">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #2a2a2a;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Chat_L" data-name="Chat L" class="cls-1" d="M431.686,213.923H412.891A2.891,2.891,0,0,0,410,216.814v13.011a2.892,2.892,0,0,0,2.891,2.891h10.791l6.558,5.783v-5.783h1.446a2.892,2.892,0,0,0,2.891-2.891V216.814A2.891,2.891,0,0,0,431.686,213.923Z" transform="translate(-408.5 -212.423)"/>
+</svg>

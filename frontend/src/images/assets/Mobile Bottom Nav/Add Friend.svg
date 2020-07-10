@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42.84" height="29.265" viewBox="0 0 42.84 29.265">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #2a2a2a;
+        stroke-linecap: round;
+        stroke-width: 2.5px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        opacity: 0.99;
+      }
+    </style>
+  </defs>
+  <g id="Plus_Icon" data-name="Plus Icon" transform="translate(1.5 1.5)">
+    <line id="Line_11" data-name="Line 11" class="cls-1" y2="14.358" transform="translate(32.641 3.789)"/>
+    <line id="Line_12" data-name="Line 12" class="cls-1" y2="14.359" transform="translate(39.84 10.968) rotate(90)"/>
+    <g id="Profile_Icon" data-name="Profile Icon">
+      <path id="Path_2" data-name="Path 2" class="cls-2" d="M509.474,308.146v-3.326c0-2.939-2.116-5.321-4.729-5.321H492.92c-2.613,0-4.73,2.382-4.73,5.321v3.326" transform="translate(-488.19 -281.882)"/>
+      <circle id="Ellipse_7" data-name="Ellipse 7" class="cls-3" cx="6" cy="6" r="6" transform="translate(3.998 0)"/>
+    </g>
+  </g>
+</svg>

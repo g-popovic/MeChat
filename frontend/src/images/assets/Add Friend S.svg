@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26.528" height="19.533" viewBox="0 0 26.528 19.533">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-width: 2.5px;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        opacity: 0.99;
+      }
+    </style>
+  </defs>
+  <g id="Add_Friend_S" data-name="Add Friend S" transform="translate(0.301 0.565)">
+    <line id="Line_11" data-name="Line 11" class="cls-1" y2="8.479" transform="translate(20.475 4.195)"/>
+    <line id="Line_12" data-name="Line 12" class="cls-1" y2="8.48" transform="translate(24.727 8.435) rotate(90)"/>
+    <g id="Profile_Icon" data-name="Profile Icon" transform="translate(-485.991 -285.599)">
+      <path id="Path_2" data-name="Path 2" class="cls-2" d="M500.759,304.606v-1.964a2.983,2.983,0,0,0-2.793-3.142h-6.983a2.983,2.983,0,0,0-2.794,3.142v1.964" transform="translate(-1 -1.539)"/>
+      <circle id="Ellipse_7" data-name="Ellipse 7" class="cls-3" cx="4" cy="4" r="4" transform="translate(489.475 286.533)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,112 @@
+$boxShadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
+$boxShadowLight: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
+
+@mixin mainContainers() {
+	background: white;
+	box-shadow: $boxShadowLight;
+	border-radius: 1.2rem;
+}
+
+@mixin topNavMobile() {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.3rem 0.9rem;
+	box-shadow: $boxShadow;
+	background-color: white;
+
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+
+	height: 3rem;
+}
+
+body {
+	font-family: "Century Gothic", Sans-Serif;
+	margin: 0;
+	padding: 0;
+}
+
+input {
+	font-family: "Century Gothic", Sans-Serif;
+}
+
+button,
+a {
+	cursor: pointer;
+}
+
+.push-effect:active {
+	position: relative;
+	top: 3px;
+}
+
+*:focus {
+	outline: none;
+}
+
+::-webkit-scrollbar {
+	width: 0.6rem;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #c2c2c2;
+	border-radius: 10rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #b1b1b1;
+}
+
+.hide-mobile {
+	display: none;
+}
+
+.nav-mobile {
+	@include topNavMobile();
+}
+
+@import "./navbar";
+@import "./friends";
+@import "./explore-page";
+@import "./profile-page";
+@import "./search-user-page";
+@import "./chat";
+@import "./login-page";
+
+@media only screen and (min-width: 600px) {
+	.hide-desktop {
+		display: none;
+	}
+
+	.panels-container {
+		display: flex;
+		justify-content: space-between;
+		width: 87%;
+		margin: 7rem auto 4rem;
+	}
+
+	.main-container {
+		@include mainContainers();
+		flex-basis: 64%;
+	}
+
+	.friends-container {
+		@include mainContainers();
+	}
+}
+
+@media only screen and (min-width: 1500px) {
+	.panels-container {
+		display: flex;
+		justify-content: space-between;
+		width: 60%;
+		margin: 8rem auto 4rem;
+	}
+}
+
+.hide {
+	display: none !important;
+}

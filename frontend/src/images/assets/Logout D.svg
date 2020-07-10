@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29.262" height="27.08" viewBox="0 0 29.262 27.08">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #111;
+        stroke-linecap: round;
+        stroke-width: 3px;
+      }
+
+      .cls-1 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="Logout_D" data-name="Logout D" transform="translate(1.5 1.5)">
+    <path id="Path_7" data-name="Path 7" class="cls-1" d="M739.3,2332.919h-4.03a7.273,7.273,0,0,0-7.273,7.274v9.534a7.273,7.273,0,0,0,7.273,7.273h4.03" transform="translate(-728 -2332.919)"/>
+    <g id="Group" transform="translate(9.303 4.5)">
+      <line id="Line_24" data-name="Line 24" class="cls-1" x1="14.581" y2="0.07" transform="translate(0 7.355)"/>
+      <path id="Path_8" data-name="Path 8" class="cls-2" d="M751.257,2341.934l7.355,7.355-7.355,7.355" transform="translate(-741.654 -2341.934)"/>
+    </g>
+  </g>
+</svg>

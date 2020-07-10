@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15.648" height="15.681" viewBox="0 0 15.648 15.681">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2.4px;
+      }
+    </style>
+  </defs>
+  <path id="Message_S_D" data-name="Message S D" class="cls-1" d="M421.16,213.923h-9.672A1.488,1.488,0,0,0,410,215.411v6.7a1.488,1.488,0,0,0,1.488,1.488h6.327l4.833,3.009V215.411A1.488,1.488,0,0,0,421.16,213.923Z" transform="translate(-408.5 -212.423)"/>
+</svg>

@@ -1,0 +1,157 @@
+$boxShadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
+$boxShadowLight: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
+
+.friend-chat-avatar {
+	width: 2.3rem;
+	height: 2.3rem;
+	object-fit: cover;
+	border-radius: 100%;
+}
+
+.nav-mobile-chat {
+	span {
+		display: flex;
+		align-items: center;
+
+		p {
+			margin: 0 0.8rem 0.3rem 0;
+			font-weight: 600;
+			font-size: 1.2em;
+		}
+	}
+}
+
+.chat-container {
+	padding: 4.5rem 1.2rem;
+}
+
+.message-container {
+	margin: 1rem 0;
+
+	p {
+		font-size: 1.2em;
+		padding: 0.5rem 1rem;
+		display: inline-block;
+		margin: 0.3rem auto 0.3rem 0;
+		max-width: 75%;
+	}
+}
+
+.friend-message {
+	text-align: left;
+
+	p {
+		background: #efefef;
+		border-radius: 1.1rem 1.1rem 1.1rem 0;
+	}
+}
+
+.my-message {
+	text-align: right;
+
+	p {
+		background: #40c8b7;
+		border-radius: 1.1rem 1.1rem 0 1.1rem;
+		color: white;
+		margin-right: 0;
+	}
+}
+
+.send-message-container {
+	border-top: 1px #c1c1c1 solid;
+	padding: 0.8rem 1.5rem;
+	box-shadow: $boxShadow;
+
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	input {
+		border-radius: 10rem;
+		border: 1px #c1c1c1 solid;
+		font-size: 1.05em;
+		padding: 0.4rem 1.5rem;
+		width: 75%;
+	}
+
+	button {
+		border: none;
+		background: none;
+		margin-left: 0.5rem;
+
+		img {
+			width: 1.8rem;
+		}
+	}
+}
+
+@media only screen and (min-width: 600px) {
+	.chat-box-container {
+		position: fixed;
+		bottom: 0;
+		right: 7rem;
+		z-index: 8;
+		background: white;
+		border-radius: 1rem 1rem 0 0;
+		width: 20rem;
+		box-shadow: $boxShadowLight;
+		border: 1px solid #dadada;
+	}
+
+	.chat-container {
+		overflow: auto;
+		height: 20rem;
+		padding: 0 1rem;
+	}
+
+	.nav-mobile-chat {
+		position: static;
+		border-radius: 1rem 1rem 0 0;
+		background-color: #40c8b7;
+		padding: 0.3rem 1rem;
+
+		.friend-chat-avatar {
+			width: 2rem;
+			height: 2rem;
+		}
+
+		.chat-minimize img {
+			margin-left: 0.3rem;
+			margin-top: 0.4rem;
+			width: 1.5rem;
+		}
+
+		span {
+			font-size: 0.9em;
+			color: white;
+			margin-top: 0.4rem;
+		}
+	}
+
+	.send-message-container {
+		position: static;
+		background: white;
+
+		input {
+			font-size: 0.9em;
+			padding: 0.35rem 1rem 0.45rem;
+		}
+	}
+
+	.message-container {
+		p {
+			font-size: 0.95em;
+		}
+	}
+
+	.minimize-chat {
+		div {
+			display: none;
+		}
+	}
+}

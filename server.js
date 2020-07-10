@@ -40,7 +40,7 @@ mongoose.connection.on("open", err => {
 	else console.log("Connected to MongoDB successful.");
 });
 
-// Session test route
+// Session authentication test route
 app.get("/profile", (req, res) => {
 	if (req.session.userId) {
 		res.send("Welcome aboard, captain. All systems online.");

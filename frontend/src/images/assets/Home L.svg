@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35.495" height="30" viewBox="0 0 35.495 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #2a2a2a;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <path id="Home_L" data-name="Home L" class="cls-1" d="M794.125,2310.5l-16.248,13h4.248v14h8.2v-8h7.6v8h8.2v-14h4.248Z" transform="translate(-776.377 -2309)"/>
+</svg>
