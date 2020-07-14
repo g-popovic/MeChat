@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Axios from "axios";
 
 import Post from "./Post";
 
-function Profile() {
+function Profile(props) {
+	const { userId } = useParams();
+	const [profileData, setProfileData] = useState("loading");
+
+	useEffect(() => {
+		async function getProfileData() {
+			const [userData, postsData] = await Promise.all([
+				Axios.get(props.ENDPOINT + "/users/profile/" + userId),
+				Axios.get(props.ENDPOINT + "/posts/author/" + userId)
+			]);
+			console.log(userData.data, postsData.data);
+		}
+
+		getProfileData();
+	}, []);
+
 	return (
 		<div className="profile-container main-container">
 			<nav className="nav-mobile-profile">

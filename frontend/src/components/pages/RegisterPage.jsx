@@ -1,35 +1,11 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
-import Axios from "axios";
+import { Link } from "react-router-dom";
 
-function LoginPage(props) {
+function LoginPage() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirm, setConfirm] = useState("");
 	const [warning, setWarning] = useState("");
-
-	async function login(e) {
-		if (username.length && password.length) {
-			e.preventDefault();
-
-			try {
-				setWarning("");
-				await Axios.post(
-					props.ENDPOINT + "/users/login",
-					{ username: username, password: password },
-					{ withCredentials: true }
-				);
-				await props.loginAttempt();
-			} catch (err) {
-				if (err.response !== undefined && err.response.status === 401) {
-					setWarning(err.response.data);
-				} else {
-					alert(err);
-				}
-				setPassword("");
-				return;
-			}
-		}
-	}
 
 	return (
 		<div className="login-container main-container">
@@ -48,7 +24,6 @@ function LoginPage(props) {
 							autoComplete="off"
 							value={username}
 							onChange={e => setUsername(e.target.value)}
-							autoFocus
 						/>
 					</div>
 					<div className="password-input-container">
@@ -61,16 +36,20 @@ function LoginPage(props) {
 							onChange={e => setPassword(e.target.value)}
 						/>
 					</div>
+					<div className="password-input-container">
+						<img src={require("../../images/assets/Password.svg")} />
+						<input placeholder="Confirm Password" required type="password" />
+					</div>
 				</div>
 
 				<p className="login-warning">{warning}</p>
 
-				<button className="push-effect" type="submit" onClick={login}>
-					LOG IN
+				<button className="push-effect" type="submit">
+					REGISTER
 				</button>
 
-				<Link className="login-second-option" to="/register">
-					CREATE ACCOUNT
+				<Link className="login-second-option" to="/">
+					LOG IN
 				</Link>
 			</form>
 		</div>

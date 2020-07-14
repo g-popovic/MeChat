@@ -4,6 +4,51 @@ body {
 	padding: 0;
 }
 
+/* LOADING ANIMATION */
+.loading {
+	text-align: center;
+	margin: 19rem auto 0;
+	display: block;
+	width: 5rem;
+
+	-webkit-animation: spin 1.5s linear infinite;
+	-moz-animation: spin 1.5s linear infinite;
+	animation: spin 1.5s linear infinite;
+}
+
+.loading-search {
+	width: 3rem;
+	margin-top: 3rem;
+}
+
+@media only screen and (min-width: 600px) {
+	.loading {
+		margin: 14rem auto 0;
+		width: 9rem;
+	}
+
+	.loading-search {
+		width: 4rem;
+		margin-top: 3rem;
+	}
+}
+
+@-webkit-keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@-moz-keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
 input {
 	font-family: "Century Gothic", Sans-Serif;
 }
@@ -143,18 +188,21 @@ a {
 	.navbar li {
 		margin: 0 2rem;
 	}
-	.navbar li a {
+	.navbar a {
 		display: -webkit-box;
 		display: -ms-flexbox;
 		display: flex;
 		-webkit-box-align: center;
 		-ms-flex-align: center;
 		align-items: center;
+		text-decoration: none;
+		color: black;
 	}
 	.navbar li p {
 		font-weight: 800;
 		font-size: 0.85em;
 		margin-left: 0.6rem;
+		text-decoration: none;
 	}
 	.navbar li:nth-child(3) p {
 		margin-left: 0.4rem;
@@ -606,12 +654,26 @@ a {
 
 .nav-mobile-search input {
 	border: none;
-	margin-left: 1rem;
+	margin-left: 0.7rem;
 	font-size: 1.3em;
+}
+
+.nav-mobile-search img {
+	width: 1.5rem;
+	margin-left: 0.3rem;
 }
 
 .users-container {
 	padding: 6rem 1.5rem;
+}
+
+.search-message {
+	text-align: center;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	color: #3a3a3a;
+	font-size: 1.2em;
 }
 
 .user {
@@ -673,6 +735,7 @@ a {
 	width: 10rem;
 	margin: 0;
 	width: 6rem;
+	height: 1.95rem;
 }
 
 .user div div button {
@@ -688,7 +751,12 @@ a {
 }
 
 .accept-btn {
-	background-color: #f54291;
+	background-color: #40c8b7;
+}
+
+.action-loading img {
+	width: 1.3rem;
+	margin: 0 auto;
 }
 
 .user-add-friend img {
@@ -778,6 +846,9 @@ a {
 		margin-right: 0.5rem;
 		order: 2;
 		margin-right: 0;
+	}
+	.action-loading img {
+		width: 1.2rem !important;
 	}
 	.user-decline-request {
 		order: 1;
@@ -1008,17 +1079,27 @@ a {
 }
 
 .login-second-option {
-	margin-top: 1.8rem;
 	font-size: 0.9em;
+	width: 10rem;
+	margin: 1.8rem auto 0;
+	cursor: pointer;
 	display: block;
 	color: #2a2a2a;
+}
+
+.login-warning {
+	color: #f30000;
+	font-size: 1.1em;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 25rem;
 }
 
 @media only screen and (min-width: 600px) {
 	.login-container {
 		margin: 4.5rem auto 0;
 		width: 30rem;
-		height: 26rem;
 		padding: 3rem 0;
 	}
 	.login-logo {
@@ -1029,7 +1110,7 @@ a {
 	}
 	.login-inputs-container {
 		margin-top: 3.2rem;
-		margin-bottom: 3.8rem;
+		margin-bottom: 3.9rem;
 	}
 	.login-inputs-container div {
 		width: 11rem;
@@ -1050,8 +1131,12 @@ a {
 		padding: 0.5rem 0;
 	}
 	.login-second-option {
-		margin-top: 1.5rem;
+		margin: 1.5rem auto 1.9rem;
 		font-size: 0.85em;
+	}
+	.login-warning {
+		top: 19.5rem;
+		font-size: 1em;
 	}
 }
 
@@ -1067,7 +1152,7 @@ a {
 		-ms-flex-pack: justify;
 		justify-content: space-between;
 		width: 87%;
-		margin: 7rem auto 2rem;
+		margin: 8.7rem auto 2rem;
 	}
 	.main-container {
 		background: white;
@@ -1101,4 +1186,79 @@ a {
 .hide {
 	display: none !important;
 }
+
+.new-post-container {
+	position: fixed;
+	z-index: 20;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	text-align: center;
+}
+
+.new-post {
+	margin: 14rem auto;
+	background: white;
+	width: 90%;
+	padding: 2.5rem 0;
+	text-align: center;
+	border-radius: 1.2rem;
+}
+
+.new-post textarea {
+	display: block;
+	margin: 0 auto 2.8rem;
+	resize: none;
+	border-radius: 0.5rem;
+	border: 1px solid #b1b1b1;
+	width: 70%;
+	height: 6rem;
+	font-size: 1.1em;
+	padding: 0.4rem 0.6rem;
+	font-family: "Century Gothic", Sans-Serif;
+}
+
+.new-post-btn {
+	background: #f54291;
+	color: white;
+	border: none;
+	border-radius: 0.5rem;
+	padding: 0.6rem 0;
+	width: 7rem;
+	font-size: 1.1em;
+	font-weight: 600;
+	margin-right: 0.5rem;
+}
+
+.cancel-post-btn {
+	background: none;
+	border: none;
+	color: #a0a0a0;
+	padding: 0.6rem 0;
+	width: 7rem;
+	font-size: 1.1em;
+	font-weight: 600;
+	display: block;
+	margin: 1rem auto 0;
+}
+
+.new-post h1 {
+	margin: 0 auto 2.5rem;
+	font-size: 1.7em;
+}
+
+@media only screen and (min-width: 600px) {
+	.new-post {
+		width: 25rem;
+		margin-top: 7rem;
+	}
+
+	.new-post-btn,
+	.cancel-post-btn {
+		font-size: 0.95em;
+	}
+}
+
 /*# sourceMappingURL=styles.css.map */

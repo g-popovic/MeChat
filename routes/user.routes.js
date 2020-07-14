@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const multer = require("multer");
 const path = require("path");
-const { exit } = require("process");
 
 // Image uploading
 const storage = multer.diskStorage({
@@ -47,7 +46,7 @@ router.post("/register", async (req, res) => {
 		await newUser.save();
 
 		req.session.myId = newUser._id;
-		req.session.avatar = newUser.avatar;
+		req.session.myAvatar = newUser.avatar;
 
 		res.status(200).send("Logged in as " + username);
 	} catch (err) {
@@ -62,11 +61,11 @@ router.post("/login", async (req, res) => {
 	password = req.body.password;
 
 	const user = await User.findOne({ username: username });
-	if (!user) res.status(404).send("Incorrect username.");
+	if (!user) res.status(401).send("Incorrect username.");
 
 	if (await bcrypt.compare(password, user.password)) {
 		req.session.myId = user._id;
-		req.session.userAvatar = user.avatar;
+		req.session.myAvatar = user.avatar;
 
 		res.status(200).send("Logged in as " + username);
 	} else {
@@ -74,24 +73,41 @@ router.post("/login", async (req, res) => {
 	}
 });
 
+// Get someonse profile info
 router.get("/profile/:userId", async (req, res) => {
 	try {
 		const user = await User.findById(req.params.userId);
 		if (!user) res.status(404).send("User not found.");
+		user.password = undefined;
 		res.send(user);
 	} catch (err) {
 		res.send(err);
 	}
 });
 
+// Get ID & Avatar of currently logged in user
+router.get("/status", (req, res) => {
+	const data = {
+		id: req.session.myId,
+		avatar: req.session.myAvatar
+	};
+	if (data.id === undefined || data.avatar === undefined) {
+		res.status(401).send("You need to login.");
+	} else {
+		res.send(data);
+	}
+});
+
 // Send friend request
 router.post("/send-request/:userId", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
 	const otherUserId = req.params.userId;
 
 	// Check if users are already friends or pending
 	const me = await User.findById(myId);
-	if (Boolean(me.friends.find(friend => String(friend.userId) === otherUserId))) {
+	if (
+		Boolean(me.friends.find(friend => String(friend.userId) === otherUserId))
+	) {
 		res.status(400).send("Can't send request.");
 		return;
 	}
@@ -123,27 +139,45 @@ router.post("/send-request/:userId", async (req, res) => {
 
 // Accept friend request
 router.post("/accept/:userId", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
 	const otherUserId = req.params.userId;
 
 	// Validate friend request
 	const me = await User.findById(myId);
-	const otherUser = me.friends.find(friend => String(friend.userId) === otherUserId);
+	const otherUser = me.friends.find(
+		friend => String(friend.userId) === otherUserId
+	);
 
-	if (!Boolean(otherUser) || otherUser.sentByMe || otherUser.status !== "pending") {
+	if (
+		!Boolean(otherUser) ||
+		otherUser.sentByMe ||
+		otherUser.status !== "pending"
+	) {
 		res.status(400).send("Can't accept request.");
 		return;
 	}
 
 	// If request is valid, update Me & otherUsers friends fields
+	const chatRoomId = otherUserId + "." + myId;
+
 	const result = await Promise.all([
 		User.updateOne(
 			{ _id: otherUserId, "friends.userId": myId },
-			{ $set: { "friends.$.status": "friends" } }
+			{
+				$set: {
+					"friends.$.status": "friends",
+					"friends.$.chatRoomId": chatRoomId
+				}
+			}
 		),
 		User.updateOne(
 			{ _id: myId, "friends.userId": otherUserId },
-			{ $set: { "friends.$.status": "friends" } }
+			{
+				$set: {
+					"friends.$.status": "friends",
+					"friends.$.chatRoomId": chatRoomId
+				}
+			}
 		)
 	]);
 
@@ -152,11 +186,17 @@ router.post("/accept/:userId", async (req, res) => {
 
 // Delete friend
 router.post("/unfriend/:userId", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
 
 	const [user, me] = await Promise.all([
-		User.updateOne({ _id: req.params.userId }, { $pull: { friends: { userId: myId } } }),
-		User.updateOne({ _id: myId }, { $pull: { friends: { userId: req.params.userId } } })
+		User.updateOne(
+			{ _id: req.params.userId },
+			{ $pull: { friends: { userId: myId } } }
+		),
+		User.updateOne(
+			{ _id: myId },
+			{ $pull: { friends: { userId: req.params.userId } } }
+		)
 	]);
 
 	if (user.nModified === 0 || me.nModified === 0) {
@@ -169,10 +209,10 @@ router.post("/unfriend/:userId", async (req, res) => {
 
 // Get a list of friends: each friend containing a username, avatar and id
 router.get("/friends", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
 
 	res.send(
-		convertToRelevantUserDate(
+		removeUserPassword(
 			await User.find({
 				_id: {
 					$in: (await User.findById(myId)).friends.map(friend =>
@@ -184,12 +224,16 @@ router.get("/friends", async (req, res) => {
 	);
 });
 
-// Get pending friend requests: each request containing a username, avatar and id
+// Get pending friend requests
 router.get("/requests", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
+
+	if (!myId) {
+		res.status(401).send("You need to login.");
+	}
 
 	res.send(
-		convertToRelevantUserDate(
+		removeUserPassword(
 			await User.find({
 				_id: {
 					$in: (await User.findById(myId)).friends
@@ -206,19 +250,22 @@ router.get("/requests", async (req, res) => {
 	);
 });
 
-// Search for a user
-router.get("/find/:userId", async (req, res) => {
+// Search for users by name
+router.get("/find/:username", async (req, res) => {
 	const regex = new RegExp(
-		req.params.userId.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\&&"),
+		req.params.username.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\&&"),
 		"gi"
 	);
-	const users = await User.find({ username: regex }).limit(10);
-	res.send(users);
+	const users = await User.find({ username: regex });
+	res.send(removeUserPassword(users));
 });
 
 // Upload an avatar for a user
 router.post("/avatar", upload.single("avatar"), async (req, res) => {
-	const result = await User.updateOne({ _id: req.session.id }, { avatar: req.file.path });
+	const result = await User.updateOne(
+		{ _id: req.session.id },
+		{ avatar: req.file.path }
+	);
 	res.send(result);
 });
 
@@ -231,19 +278,12 @@ router.delete("/avatar", async (req, res) => {
 	res.send(result);
 });
 
-// Get all users in the database
-router.get("/all", (req, res) => {
-	User.find()
-		.then(users => res.send(users))
-		.catch(err => res.send(err));
-});
-
-// Convert user document (password, friends-list, etc.)
-// => into relevant information (id, username & avatar)
-function convertToRelevantUserDate(users) {
-	return users.map(user =>
-		Object({ id: user._id, username: user.username, avatar: user.avatar })
-	);
+// Processes an array of users and returns them without a password (for security)
+function removeUserPassword(users) {
+	return users.map(user => {
+		user.password = undefined;
+		return user;
+	});
 }
 
 module.exports = router;

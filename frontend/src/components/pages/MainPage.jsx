@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 
 import Navbar from "../partials/Navbar";
 import FriendsPanel from "../partials/FriendsPanel";
@@ -7,29 +7,47 @@ import PostsContainer from "../partials/PostsContainer";
 import Profile from "../partials/Profile";
 import SearchContainer from "../partials/SearchContainer";
 
-function MainPage() {
+function MainPage(props) {
 	return (
-		<>
-			<Navbar />
-			<div class="panels-container">
+		<BrowserRouter>
+			<Navbar ENDPOINT={props.ENDPOINT} myData={props.myData} />
+			<div className="panels-container">
 				<FriendsPanel />
-				<BrowserRouter>
-					<Switch>
-						<Route path="/explore" component={PostsContainer} />
-						<Route path="/profile" component={Profile} />
-						<Route path="/profile/:userId" component={Profile} />
-						<Route path="/search" component={SearchContainer} />
-						<Route
-							component={() => (
-								<h1 style={{ "font-size": "5em", "text-align": "center" }}>
-									Jedi boraniju mmbraleee
-								</h1>
-							)}
-						/>
-					</Switch>
-				</BrowserRouter>
+
+				<Switch>
+					<Route path="/" exact component={PostsContainer} />
+					<Route
+						path="/profile/:userId"
+						component={() => (
+							<Profile
+								ENDPOINT={props.ENDPOINT}
+								myData={props.myData}
+							/>
+						)}
+					/>
+					<Route
+						path="/search"
+						component={() => (
+							<SearchContainer
+								ENDPOINT={props.ENDPOINT}
+								myData={props.myData}
+							/>
+						)}
+					/>
+					<Route
+						component={() => (
+							<h1
+								style={{
+									"font-size": "5em",
+									"text-align": "center"
+								}}>
+								Error 404
+							</h1>
+						)}
+					/>
+				</Switch>
 			</div>
-		</>
+		</BrowserRouter>
 	);
 }
 

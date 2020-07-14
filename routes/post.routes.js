@@ -3,7 +3,11 @@ const Post = require("../models/post.model");
 
 // Create a new post
 router.post("/new-post", async (req, res) => {
-	const myId = req.body.myId;
+	const myId = req.session.myId;
+
+	if (!myId) {
+		res.status(401).send("You need to login first.");
+	}
 
 	const newPost = new Post({
 		content: req.body.content,

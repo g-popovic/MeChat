@@ -5,9 +5,13 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/post.routes");
 const session = require("express-session");
+const http = require("http");
+const socketio = require("socket.io");
 const cors = require("cors");
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -17,7 +21,7 @@ app.use(
 		credentials: true,
 		origin:
 			process.env.NODE_ENV === "production"
-				? "https://blogme02.herokuapp.com"
+				? "http://localhost:3000"
 				: "http://localhost:3000"
 	})
 );
@@ -33,7 +37,8 @@ app.use(
 mongoose.connect(process.env.ATLAS_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	useCreateIndex: true
+	useCreateIndex: true,
+	useFindAndModify: false
 });
 mongoose.connection.on("open", err => {
 	if (err) console.log(err);
@@ -42,11 +47,18 @@ mongoose.connection.on("open", err => {
 
 // Session authentication test route
 app.get("/profile", (req, res) => {
-	if (req.session.userId) {
+	if (req.session.myId) {
 		res.send("Welcome aboard, captain. All systems online.");
 	} else {
 		res.send("Access denied.");
 	}
+});
+
+// Web sockets for live chat
+io.on("connect", socket => {
+	socket.on("join", ({ room }) => {
+		console.log("connected");
+	});
 });
 
 // Connect routes
@@ -54,6 +66,6 @@ app.use("/users/", userRoutes);
 app.use("/posts/", postRoutes);
 
 // Run server
-app.listen(process.env.PORT || 5000, (req, res) => {
+server.listen(process.env.PORT || 5000, () => {
 	console.log("Server running on port " + (process.env.PORT || 5000));
 });

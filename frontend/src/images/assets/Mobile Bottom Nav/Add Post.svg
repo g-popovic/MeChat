@@ -6,7 +6,7 @@
       }
 
       .cls-1, .cls-2 {
-        stroke: #2a2a2a;
+        stroke: #000000;
         stroke-width: 2.5px;
       }
 

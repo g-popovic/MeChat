@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import Axios from "axios";
 
 function ChatBox() {
+	const [messages, setMessages] = useState([]);
+	const [newMessage, setNewMessage] = useState("");
+
+	useState(() => {
+		console.log("hello");
+	}, []);
+
 	return (
 		<div className="chat-box-container">
 			<nav className="nav-mobile-chat nav-mobile">
