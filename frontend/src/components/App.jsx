@@ -32,6 +32,20 @@ function App() {
 		}
 	}
 
+	function redirectBasedOnStatus(componentIfLoggedOut, componentIfLoggedIn) {
+		return loggedIn === "loading" ? (
+			<img
+				className="loading"
+				src={require("../images/assets/Loading.svg")}
+				alt="loading"
+			/>
+		) : !loggedIn ? (
+			componentIfLoggedOut
+		) : (
+			componentIfLoggedIn
+		);
+	}
+
 	async function updateLoggedIn() {
 		setLoggedIn(await getLoggedIn());
 	}
@@ -42,18 +56,11 @@ function App() {
 				<Route
 					path="/login"
 					component={() => {
-						return loggedIn === "loading" ? (
-							<img
-								className="loading"
-								src={require("../images/assets/Loading.svg")}
-								alt="loading"
-							/>
-						) : !loggedIn ? (
+						return redirectBasedOnStatus(
 							<LoginPage
 								ENDPOINT={ENDPOINT}
 								loginAttempt={updateLoggedIn}
-							/>
-						) : (
+							/>,
 							<Redirect to="/" />
 						);
 					}}
@@ -61,27 +68,29 @@ function App() {
 
 				<Route
 					path="/register"
-					component={() => <RegisterPage ENDPOINT={ENDPOINT} />}
+					component={() => {
+						return redirectBasedOnStatus(
+							<RegisterPage
+								ENDPOINT={ENDPOINT}
+								loginAttempt={updateLoggedIn}
+							/>,
+							<Redirect to="/" />
+						);
+					}}
 				/>
 
 				<Route
-					component={() =>
-						loggedIn === "loading" ? (
-							<img
-								className="loading"
-								src={require("../images/assets/Loading.svg")}
-								alt="loading"
-							/>
-						) : !loggedIn ? (
-							<Redirect to="/login" />
-						) : (
+					component={() => {
+						return redirectBasedOnStatus(
+							<Redirect to="/login" />,
 							<MainPage
 								ENDPOINT={ENDPOINT}
 								loggedIn={loggedIn}
 								myData={myData}
+								onLogout={updateLoggedIn}
 							/>
-						)
-					}
+						);
+					}}
 				/>
 			</Switch>
 		</BrowserRouter>

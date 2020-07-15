@@ -4,7 +4,7 @@ function Friend() {
 	return (
 		<li className="friend">
 			<img
-				src={require("../../images/uploads/undefined-avatar.jpg")}
+				src={require("../../images/uploads/default-avatar.svg")}
 				alt="user avatar"
 			/>
 			<span>

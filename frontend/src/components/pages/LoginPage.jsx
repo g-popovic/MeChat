@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Axios from "axios";
 
 function LoginPage(props) {
@@ -23,7 +23,7 @@ function LoginPage(props) {
 				if (err.response !== undefined && err.response.status === 401) {
 					setWarning(err.response.data);
 				} else {
-					alert(err);
+					alert("Oops! Something went wrong.");
 				}
 				setPassword("");
 				return;

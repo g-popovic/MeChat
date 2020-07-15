@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
 function User(props) {
 	const [userType, setUserType] = useState(props.userType);
@@ -47,21 +48,18 @@ function User(props) {
 		}
 	}
 
-	async function visitProfile() {
-		alert("Visiting profile...");
-	}
-
 	return (
 		<div className="user">
-			<img
-				onClick={visitProfile}
-				className="user-avatar"
-				src={require("../../images/uploads/" + props.avatar)}
-			/>
+			<Link to={"/profile/" + props.id}>
+				<img
+					className="user-avatar"
+					src={require("../../images/uploads/" + props.avatar)}
+				/>
+			</Link>
 			<div>
-				<p onClick={visitProfile} className="user-name">
-					{props.name}
-				</p>
+				<Link to={"/profile/" + props.id}>
+					<p className="user-name">{props.name}</p>
+				</Link>
 				{userType === "stranger" ? (
 					<div>
 						<button

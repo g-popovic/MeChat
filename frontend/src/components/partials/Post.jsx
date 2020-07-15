@@ -1,27 +1,27 @@
 import React from "react";
 
-function Post() {
+function Post(props) {
 	return (
 		<div className="post">
 			<div className="author-info">
 				<a href="/profile">
 					<img
 						className="post-author-image"
-						src={require("../../images/uploads/undefined-avatar.jpg")}
+						src={require("../../images/uploads/" + props.avatar)}
 					/>
 				</a>
 				<span>
-					<p className="author">Djoka</p>
+					<p className="author">{props.author}</p>
 					<p className="post-date">2 weeks ago</p>
 				</span>
 			</div>
-			<p className="post-content">
-				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-				eirmod.
-			</p>
+			<p className="post-content">{props.content}</p>
 			<div className="likes">
-				<img className="unliked" src={require("../../images/assets/Like.svg")} />
-				<p>15 likes</p>
+				<img
+					className="unliked"
+					src={require("../../images/assets/Like.svg")}
+				/>
+				<p>{props.likes.length} likes</p>
 			</div>
 		</div>
 	);

@@ -37,12 +37,27 @@ router.post("/unlike/:postId", async (req, res) => {
 
 // Get all posts from a specific user
 router.get("/author/:userId", async (req, res) => {
-	res.send(await Post.find({ author: req.params.userId }).limit(20));
+	try {
+		const result = await Post.find({ author: req.params.userId }).limit(20);
+
+		if (!result) throw new Error(404, "User not found.");
+
+		res.send(result);
+	} catch (err) {
+		res.send(err);
+	}
 });
 
 // Get all posts
 router.get("/all", async (req, res) => {
 	res.send(await Post.find().limit(20));
+});
+
+// Experiment
+router.get("/test", async (req, res) => {
+	const post = await Post.findOne();
+	const author = await post.author;
+	res.send(author);
 });
 
 module.exports = router;

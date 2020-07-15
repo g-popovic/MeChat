@@ -405,7 +405,7 @@ a {
 }
 
 .posts-container .post .likes p {
-	margin: 0 0 0.2rem;
+	margin: 0;
 	font-size: 0.9em;
 	color: #f54291;
 }
@@ -445,7 +445,24 @@ a {
 	text-align: center;
 	-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
 	box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
-	padding-bottom: 2.8rem;
+	padding-bottom: 3.5rem;
+}
+
+.profile-background {
+	width: 100%;
+	height: 9rem;
+	margin: 0;
+	overflow: hidden;
+	background-image: url(https://source.unsplash.com/collection/8994315/);
+	background-position: bottom;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.blur {
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	height: 100%;
+	width: 100%;
 }
 
 .profile-posts {
@@ -458,24 +475,89 @@ a {
 	-o-object-fit: cover;
 	object-fit: cover;
 	border-radius: 100%;
-	margin: 2rem auto 1rem;
+	margin: -3.7rem auto 1rem;
+	border: 6px solid white;
+	z-index: 5;
+	position: relative;
+	background: white;
+}
+
+.profile-name-container {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	margin-bottom: 1.8rem;
+}
+
+.profile-name-container::before {
+	content: "";
+	width: 2rem;
 }
 
 .logout {
-	position: absolute;
-	top: 2.1rem;
-	right: 1rem;
+	position: relative;
 	background: none;
+	display: inline-block;
 	border: none;
 	border-radius: 100%;
+	width: 2rem;
+}
+
+.tooltip-text {
+	visibility: hidden;
+	width: 3rem;
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+	border-radius: 0.3rem;
+	text-align: center;
+	padding: 0.3rem;
+
+	opacity: 0;
+	transition: opacity 0.8s;
+
+	position: absolute;
+	z-index: 7;
+	bottom: 2px;
+	left: 120%;
+}
+
+.unfriend .tooltip-text {
+	left: 160%;
+	width: 4rem;
+}
+
+.tooltip:hover .tooltip-text {
+	visibility: visible;
+	opacity: 1;
+}
+
+.tooltip-text::after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	right: 100%; /* To the left of the tooltip */
+	margin-top: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent rgba(0, 0, 0, 0.5) transparent transparent;
 }
 
 .logout img {
 	width: 1.4rem;
 }
 
+.unfriend img {
+	width: 2rem;
+}
+
 .profile-name {
-	margin: 0 auto 2.5rem;
+	margin: 0 1rem;
 	font-size: 1.7em;
 }
 
@@ -545,7 +627,7 @@ a {
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
 	justify-content: center;
-	margin-top: 2.2rem;
+	margin-top: 0rem;
 }
 
 .profile-stats div {
@@ -591,28 +673,16 @@ a {
 		width: 100%;
 	}
 	.profile-avatar {
-		margin-top: -4.6rem;
+		margin-top: -4.3rem;
 		height: 8rem;
 		width: 8rem;
 		border: 7px white solid;
 		position: relative;
 		z-index: 5;
+		cursor: pointer;
 	}
 	.profile-name-container {
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: flex;
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-		align-items: center;
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
-		justify-content: center;
 		margin-bottom: 1.9rem;
-	}
-	.profile-name-container::before {
-		content: "";
-		width: 2rem;
 	}
 	.profile-name {
 		margin: 0 1rem;
@@ -620,7 +690,6 @@ a {
 	}
 	.logout {
 		margin-top: 0.2rem;
-		position: static;
 	}
 	.profile-action img {
 		width: 1.1em;
@@ -685,6 +754,11 @@ a {
 	justify-content: start;
 	padding: 1.2rem 0;
 	border-bottom: 1px solid #e6e6e6;
+}
+
+.user a {
+	color: black;
+	text-decoration: none;
 }
 
 .user:first-child {
@@ -754,9 +828,13 @@ a {
 	background-color: #40c8b7;
 }
 
-.action-loading img {
+.action-loading.friend-action-btn img {
 	width: 1.3rem;
 	margin: 0 auto;
+}
+
+.action-loading {
+	background: #a7a7a7;
 }
 
 .user-add-friend img {
@@ -1096,6 +1174,10 @@ a {
 	top: 25rem;
 }
 
+.register-warning {
+	top: 29rem;
+}
+
 @media only screen and (min-width: 600px) {
 	.login-container {
 		margin: 4.5rem auto 0;
@@ -1137,6 +1219,9 @@ a {
 	.login-warning {
 		top: 19.5rem;
 		font-size: 1em;
+	}
+	.register-warning {
+		top: 23.5rem;
 	}
 }
 
@@ -1198,6 +1283,15 @@ a {
 	text-align: center;
 }
 
+@keyframes Slide_Up {
+	0% {
+		transform: translateY(20rem);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
 .new-post {
 	margin: 14rem auto;
 	background: white;
@@ -1205,6 +1299,7 @@ a {
 	padding: 2.5rem 0;
 	text-align: center;
 	border-radius: 1.2rem;
+	animation: Slide_Up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.175);
 }
 
 .new-post textarea {
@@ -1249,6 +1344,10 @@ a {
 	font-size: 1.7em;
 }
 
+.file-not-chosen {
+	background: #d1d1d1;
+}
+
 @media only screen and (min-width: 600px) {
 	.new-post {
 		width: 25rem;
@@ -1259,6 +1358,29 @@ a {
 	.cancel-post-btn {
 		font-size: 0.95em;
 	}
+}
+
+.avatar-input {
+	font-size: 1.5em;
+	background: none;
+	visibility: hidden;
+	position: absolute;
+}
+
+.upload-avatar p {
+	font-size: 1.3em;
+	display: block;
+	margin-bottom: 0.5rem;
+	color: #757575;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.choose-img-btn {
+	margin-bottom: 3rem;
+	display: block;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 /*# sourceMappingURL=styles.css.map */

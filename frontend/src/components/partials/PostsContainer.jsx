@@ -9,9 +9,13 @@ function PostsContainer() {
 			<nav className="nav-mobile-feed nav-mobile hide-desktop">
 				<h1>Feed</h1>
 				<a href="/profile">
-					<img src={require("../../images/uploads/undefined-avatar.jpg")} />
+					<img
+						src={require("../../images/uploads/default-avatar.svg")}
+					/>
 				</a>
 			</nav>
+			<h1>POSTS</h1>
+			{/* <Post />
 			<Post />
 			<Post />
 			<Post />
@@ -19,8 +23,7 @@ function PostsContainer() {
 			<Post />
 			<Post />
 			<Post />
-			<Post />
-			<Post />
+			<Post /> */}
 		</div>
 	);
 }

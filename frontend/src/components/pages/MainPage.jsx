@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 
 import Navbar from "../partials/Navbar";
@@ -22,6 +22,7 @@ function MainPage(props) {
 							<Profile
 								ENDPOINT={props.ENDPOINT}
 								myData={props.myData}
+								onLogout={props.onLogout}
 							/>
 						)}
 					/>
@@ -38,8 +39,8 @@ function MainPage(props) {
 						component={() => (
 							<h1
 								style={{
-									"font-size": "5em",
-									"text-align": "center"
+									fontSize: "5em",
+									textAlign: "center"
 								}}>
 								Error 404
 							</h1>

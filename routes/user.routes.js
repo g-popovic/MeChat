@@ -7,12 +7,10 @@ const path = require("path");
 // Image uploading
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, "./uploads/");
+		cb(null, "./frontend/src/images/uploads");
 	},
 	filename: function (req, file, cb) {
-		console.log(path.extname(file.originalname));
-
-		cb(null, req.session.userId + "-avatar" + path.extname(file.originalname));
+		cb(null, req.session.myId + "-avatar.jpg");
 	}
 });
 const fileFilter = (req, file, cb) => {
@@ -73,11 +71,19 @@ router.post("/login", async (req, res) => {
 	}
 });
 
+router.post("/logout", (req, res) => {
+	req.session.myId = undefined;
+	req.session.myAvatar = undefined;
+	res.send("Logged out.");
+});
+
 // Get someonse profile info
 router.get("/profile/:userId", async (req, res) => {
 	try {
 		const user = await User.findById(req.params.userId);
-		if (!user) res.status(404).send("User not found.");
+
+		if (!user) throw new Error(404, "User not found.");
+
 		user.password = undefined;
 		res.send(user);
 	} catch (err) {
@@ -262,20 +268,16 @@ router.get("/find/:username", async (req, res) => {
 
 // Upload an avatar for a user
 router.post("/avatar", upload.single("avatar"), async (req, res) => {
-	const result = await User.updateOne(
-		{ _id: req.session.id },
-		{ avatar: req.file.path }
-	);
-	res.send(result);
-});
-
-// Remove profile picture
-router.delete("/avatar", async (req, res) => {
-	const result = await User.updateOne(
-		{ _id: req.session.id },
-		{ avatar: "default-avatar.svg" }
-	);
-	res.send(result);
+	try {
+		const result = await User.updateOne(
+			{ _id: req.session.myId },
+			{ avatar: req.file.filename }
+		);
+		req.session.myAvatar = req.file.filename;
+		res.send(result);
+	} catch (err) {
+		res.status(400).send("Something went wrong. Please try again");
+	}
 });
 
 // Processes an array of users and returns them without a password (for security)
