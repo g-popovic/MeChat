@@ -16,6 +16,7 @@ function Profile(props) {
 
 	async function getProfileData() {
 		try {
+			setNotFound(false);
 			const [userData, postsData] = await Promise.all([
 				Axios.get(props.ENDPOINT + "/users/profile/" + userId),
 				Axios.get(props.ENDPOINT + "/posts/author/" + userId)
@@ -85,7 +86,7 @@ function Profile(props) {
 	}
 
 	function toggleUploadOpen() {
-		setUploadOpen(prevVal => !prevVal);
+		if (props.myData.id === userId) setUploadOpen(prevVal => !prevVal);
 	}
 
 	function handleFileSelect(e) {
@@ -94,6 +95,11 @@ function Profile(props) {
 
 	async function updateAvatar(e) {
 		if (selectedFile) {
+			if (selectedFile.size > 1024 * 1024) {
+				alert("File too large. Please select a file under 1MB");
+				return;
+			}
+
 			try {
 				const fd = new FormData();
 				fd.append("avatar", selectedFile, selectedFile.name);
@@ -181,10 +187,15 @@ function Profile(props) {
 						{posts.map(post => (
 							<Post
 								key={post._id}
+								myData={props.myData}
+								ENDPOINT={props.ENDPOINT}
+								authorId={post.authorId}
+								id={post._id}
 								author={profileData.username}
 								avatar={profileData.avatar}
-								likes={post.likes}
 								content={post.content}
+								likes={post.likes}
+								date={post.date}
 							/>
 						))}
 					</div>

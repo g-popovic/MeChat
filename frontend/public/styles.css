@@ -346,6 +346,12 @@ a {
 	padding: 1.1rem 0;
 }
 
+.post a {
+	color: black;
+	text-decoration: none;
+	width: fit-content;
+}
+
 .posts-container .post .post-author-image {
 	width: 2.4rem;
 	height: 2.4rem;
@@ -364,6 +370,7 @@ a {
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
+	width: fit-content;
 }
 
 .posts-container .post .author-info .author,
@@ -396,6 +403,7 @@ a {
 	-ms-flex-align: center;
 	align-items: center;
 	cursor: pointer;
+	width: fit-content;
 }
 
 .posts-container .post .likes img,
@@ -1381,6 +1389,24 @@ a {
 	display: block;
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+.login-loading {
+	background-color: #d1d1d1 !important;
+	cursor: auto;
+}
+
+.liked {
+	animation: like 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+@keyframes like {
+	0% {
+		transform: scale(0.1);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -7,8 +7,10 @@ function RegisterPage(props) {
 	const [password, setPassword] = useState("");
 	const [confirm, setConfirm] = useState("");
 	const [warning, setWarning] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	async function register(e) {
+		setLoading(true);
 		if (username.length && password.length && password === confirm) {
 			e.preventDefault();
 			const data = {
@@ -29,6 +31,7 @@ function RegisterPage(props) {
 			e.preventDefault();
 			setConfirm("");
 		}
+		setLoading(false);
 	}
 
 	function changeConfirm(e) {
@@ -84,7 +87,13 @@ function RegisterPage(props) {
 
 				<p className="login-warning register-warning">{warning}</p>
 
-				<button onClick={register} className="push-effect" type="submit">
+				<button
+					onClick={register}
+					className={
+						"action-loading" +
+						(loading ? " login-loading" : " push-effect")
+					}
+					type="submit">
 					REGISTER
 				</button>
 

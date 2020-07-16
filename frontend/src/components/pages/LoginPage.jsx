@@ -6,8 +6,10 @@ function LoginPage(props) {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [warning, setWarning] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	async function login(e) {
+		setLoading(true);
 		if (username.length && password.length) {
 			e.preventDefault();
 
@@ -26,9 +28,9 @@ function LoginPage(props) {
 					alert("Oops! Something went wrong.");
 				}
 				setPassword("");
-				return;
 			}
 		}
+		setLoading(false);
 	}
 
 	return (
@@ -65,7 +67,13 @@ function LoginPage(props) {
 
 				<p className="login-warning">{warning}</p>
 
-				<button className="push-effect" type="submit" onClick={login}>
+				<button
+					className={
+						"action-loading" +
+						(loading ? " login-loading" : " push-effect")
+					}
+					type="submit"
+					onClick={login}>
 					LOG IN
 				</button>
 

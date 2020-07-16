@@ -15,7 +15,16 @@ function MainPage(props) {
 				<FriendsPanel />
 
 				<Switch>
-					<Route path="/" exact component={PostsContainer} />
+					<Route
+						path="/"
+						exact
+						component={() => (
+							<PostsContainer
+								ENDPOINT={props.ENDPOINT}
+								myData={props.myData}
+							/>
+						)}
+					/>
 					<Route
 						path="/profile/:userId"
 						component={() => (
