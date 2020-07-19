@@ -8,6 +8,7 @@ const postRoutes = require("./routes/post.routes");
 const session = require("express-session");
 const http = require("http");
 const socketio = require("socket.io");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -54,6 +55,14 @@ mongoose.connection.on("open", err => {
 app.use("/users/", userRoutes);
 app.use("/posts/", postRoutes);
 app.use("/chat/", chatRoutes);
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.stasic("frontend/build"));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+	});
+}
 
 // Run server
 server.listen(process.env.PORT || 5000, () => {
