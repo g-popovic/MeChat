@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import Axios from "axios";
-
-import Post from "./Post";
+import axiosApp from "../../utils/axiosConfig";
 import { Link } from "react-router-dom";
+
+import PageLoading from "./PageLoading";
+import Post from "./Post";
 
 function PostsContainer(props) {
 	const [posts, setPosts] = useState("loading");
 
 	async function updatePosts() {
-		setPosts((await Axios.get(props.ENDPOINT + "/posts/all")).data.reverse());
+		setPosts((await axiosApp.get("/posts/all")).data.reverse());
 	}
 
 	useState(() => {
@@ -21,22 +22,19 @@ function PostsContainer(props) {
 				<h1>Feed</h1>
 				<Link to={"/profile/" + props.myData.id}>
 					<img
-						src={require("../../images/uploads/" + props.myData.avatar)}
+						src={require("../../images/uploads/" +
+							props.myData.avatar)}
+						alt="my profile picture"
 					/>
 				</Link>
 			</nav>
 			{posts === "loading" ? (
-				<img
-					className="loading loading-search"
-					src={require("../../images/assets/Loading.svg")}
-					alt="loading"
-				/>
+				<PageLoading />
 			) : (
 				posts.map(post => (
 					<Post
 						key={post.postId}
 						myData={props.myData}
-						ENDPOINT={props.ENDPOINT}
 						authorId={post.authorId}
 						id={post.postId}
 						author={post.authorName}

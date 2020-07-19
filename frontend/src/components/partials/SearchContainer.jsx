@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 
+import PageLoading from "./PageLoading";
 import User from "./User";
 
 function SearchContainer(props) {
@@ -11,7 +12,7 @@ function SearchContainer(props) {
 	useEffect(() => {
 		// Display all pending friend requests
 		async function getRequests() {
-			const result = await Axios.get(props.ENDPOINT + "/users/requests", {
+			const result = await axiosApp.get("/users/requests", {
 				withCredentials: true
 			});
 
@@ -32,9 +33,7 @@ function SearchContainer(props) {
 		setUsers("loading");
 
 		if (e.target.value.length) {
-			const result = await Axios.get(
-				props.ENDPOINT + "/users/find/" + e.target.value
-			);
+			const result = await axiosApp.get("/users/find/" + e.target.value);
 
 			if (result.data.length) {
 				setSearchMessage("");
@@ -51,7 +50,7 @@ function SearchContainer(props) {
 	return (
 		<div className="search-user-container main-container">
 			<nav className="nav-mobile-search nav-mobile">
-				<img src={require("../../images/assets/Search.svg")} />
+				<img src={require("../../images/assets/Search.svg")} alt="" />
 				<input
 					onChange={inputChange}
 					value={username}
@@ -65,11 +64,7 @@ function SearchContainer(props) {
 				{searchMessage.length ? (
 					<p className="search-message">{searchMessage}</p>
 				) : !users.length ? null : users === "loading" ? (
-					<img
-						className="loading loading-search"
-						src={require("../../images/assets/Loading.svg")}
-						alt="loading"
-					/>
+					<PageLoading />
 				) : (
 					users.map(user => {
 						const meAsFriend = user.friends.find(
@@ -93,7 +88,6 @@ function SearchContainer(props) {
 										? "requested"
 										: "pending"
 								}
-								ENDPOINT={props.ENDPOINT}
 							/>
 						);
 					})

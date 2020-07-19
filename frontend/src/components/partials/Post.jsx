@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 import moment from "moment";
 
 function Post(props) {
@@ -16,28 +16,20 @@ function Post(props) {
 					setLiked(false);
 					setLikeCount(prevVal => prevVal - 1);
 
-					console.log("Unliking the post");
-
-					console.log(
-						await Axios.post(
-							props.ENDPOINT + "/posts/unlike/" + props.id,
-							{},
-							{ withCredentials: true }
-						)
+					await axiosApp.post(
+						"/posts/unlike/" + props.id,
+						{},
+						{ withCredentials: true }
 					);
 				} else {
 					// Like the post
 					setLiked(true);
 					setLikeCount(prevVal => prevVal + 1);
 
-					console.log("Liking the post");
-
-					console.log(
-						await Axios.post(
-							props.ENDPOINT + "/posts/like/" + props.id,
-							{},
-							{ withCredentials: true }
-						)
+					await axiosApp.post(
+						"/posts/like/" + props.id,
+						{},
+						{ withCredentials: true }
 					);
 				}
 			} catch (err) {
@@ -54,6 +46,7 @@ function Post(props) {
 					<img
 						className="post-author-image"
 						src={require("../../images/uploads/" + props.avatar)}
+						alt="profile picture"
 					/>
 				</Link>
 				<span>
@@ -71,6 +64,7 @@ function Post(props) {
 					src={require(`../../images/assets/Like${
 						liked ? "" : " Gray"
 					}.svg`)}
+					alt="like icon"
 				/>
 				<p>{likeCount} likes</p>
 			</div>

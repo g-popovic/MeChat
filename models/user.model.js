@@ -1,10 +1,5 @@
 const mongoose = require("mongoose");
 
-const messageSchema = {
-	text: String,
-	sentByMe: Boolean
-};
-
 const friendSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -12,8 +7,7 @@ const friendSchema = new mongoose.Schema({
 	},
 	status: String,
 	sentByMe: Boolean,
-	chatRoomID: { type: String, default: null },
-	messages: [messageSchema]
+	chatRoomId: { type: String, default: null }
 });
 
 const userSchema = new mongoose.Schema({

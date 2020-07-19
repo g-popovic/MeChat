@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 
+import PageLoading from "./PageLoading";
 import Post from "./Post";
 
 function Profile(props) {
@@ -18,8 +19,8 @@ function Profile(props) {
 		try {
 			setNotFound(false);
 			const [userData, postsData] = await Promise.all([
-				Axios.get(props.ENDPOINT + "/users/profile/" + userId),
-				Axios.get(props.ENDPOINT + "/posts/author/" + userId)
+				axiosApp.get("/users/profile/" + userId),
+				axiosApp.get("/posts/author/" + userId)
 			]);
 
 			const data = {
@@ -56,11 +57,7 @@ function Profile(props) {
 
 	async function logout() {
 		if (window.confirm("Are you sure you want to logout?")) {
-			await Axios.post(
-				props.ENDPOINT + "/users/logout",
-				{},
-				{ withCredentials: true }
-			);
+			await axiosApp.post("/users/logout", {}, { withCredentials: true });
 			props.onLogout();
 		}
 	}
@@ -72,8 +69,8 @@ function Profile(props) {
 			)
 		) {
 			try {
-				await Axios.post(
-					props.ENDPOINT + "/users/unfriend/" + userId,
+				await axiosApp.post(
+					"/users/unfriend/" + userId,
 					{},
 					{ withCredentials: true }
 				);
@@ -104,7 +101,7 @@ function Profile(props) {
 				const fd = new FormData();
 				fd.append("avatar", selectedFile, selectedFile.name);
 
-				await Axios.post(props.ENDPOINT + "/users/avatar", fd, {
+				await axiosApp.post("/users/avatar", fd, {
 					withCredentials: true
 				});
 
@@ -124,11 +121,7 @@ function Profile(props) {
 				{notFound ? (
 					<h2 className="search-message">User not found</h2>
 				) : profileData === "loading" ? (
-					<img
-						className="loading loading-search"
-						src={require("../../images/assets/Loading.svg")}
-						alt="loading"
-					/>
+					<PageLoading />
 				) : (
 					<nav className="nav-mobile-profile">
 						<div className="profile-background">
@@ -139,6 +132,7 @@ function Profile(props) {
 							className="profile-avatar"
 							src={require("../../images/uploads/" +
 								profileData.avatar)}
+							alt="profile picture"
 						/>
 						<div className="profile-name-container">
 							<h1 className="profile-name">
@@ -188,7 +182,6 @@ function Profile(props) {
 							<Post
 								key={post._id}
 								myData={props.myData}
-								ENDPOINT={props.ENDPOINT}
 								authorId={post.authorId}
 								id={post._id}
 								author={profileData.username}

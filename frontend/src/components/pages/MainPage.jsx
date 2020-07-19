@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Switch, withRouter } from "react-router-dom";
 
 import Navbar from "../partials/Navbar";
@@ -8,28 +8,32 @@ import Profile from "../partials/Profile";
 import SearchContainer from "../partials/SearchContainer";
 
 function MainPage(props) {
+	const [friendsPanelOpen, setFriendsPanelOpen] = useState(false);
+
+	function togglePanel() {
+		setFriendsPanelOpen(prev => !prev);
+	}
+
 	return (
 		<BrowserRouter>
-			<Navbar ENDPOINT={props.ENDPOINT} myData={props.myData} />
+			<Navbar myData={props.myData} toggleFriendsPanel={togglePanel} />
 			<div className="panels-container">
-				<FriendsPanel />
+				<FriendsPanel
+					myData={props.myData}
+					toggleFriendsPanel={togglePanel}
+					panelOpen={friendsPanelOpen}
+				/>
 
 				<Switch>
 					<Route
 						path="/"
 						exact
-						component={() => (
-							<PostsContainer
-								ENDPOINT={props.ENDPOINT}
-								myData={props.myData}
-							/>
-						)}
+						component={() => <PostsContainer myData={props.myData} />}
 					/>
 					<Route
 						path="/profile/:userId"
 						component={() => (
 							<Profile
-								ENDPOINT={props.ENDPOINT}
 								myData={props.myData}
 								onLogout={props.onLogout}
 							/>
@@ -37,12 +41,7 @@ function MainPage(props) {
 					/>
 					<Route
 						path="/search"
-						component={() => (
-							<SearchContainer
-								ENDPOINT={props.ENDPOINT}
-								myData={props.myData}
-							/>
-						)}
+						component={() => <SearchContainer myData={props.myData} />}
 					/>
 					<Route
 						component={() => (

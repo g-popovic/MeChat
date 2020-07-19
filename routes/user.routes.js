@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
+const ChatRoom = require("../models/chatRoom.model");
 const multer = require("multer");
-const path = require("path");
+const mongoose = require("mongoose");
 
 // Image uploading
 const storage = multer.diskStorage({
@@ -164,7 +165,8 @@ router.post("/accept/:userId", async (req, res) => {
 	}
 
 	// If request is valid, update Me & otherUsers friends fields
-	const chatRoomId = otherUserId + "." + myId;
+
+	var newChatRoomId = mongoose.Types.ObjectId();
 
 	const result = await Promise.all([
 		User.updateOne(
@@ -172,7 +174,7 @@ router.post("/accept/:userId", async (req, res) => {
 			{
 				$set: {
 					"friends.$.status": "friends",
-					"friends.$.chatRoomId": chatRoomId
+					"friends.$.chatRoomId": newChatRoomId
 				}
 			}
 		),
@@ -181,10 +183,11 @@ router.post("/accept/:userId", async (req, res) => {
 			{
 				$set: {
 					"friends.$.status": "friends",
-					"friends.$.chatRoomId": chatRoomId
+					"friends.$.chatRoomId": newChatRoomId
 				}
 			}
-		)
+		),
+		new ChatRoom({ _id: newChatRoomId }).save()
 	]);
 
 	res.send(result);
@@ -194,6 +197,10 @@ router.post("/accept/:userId", async (req, res) => {
 router.post("/unfriend/:userId", async (req, res) => {
 	const myId = req.session.myId;
 
+	const targetRoom = (await User.findById(myId)).friends.find(
+		friend => String(friend.userId) === req.params.userId
+	).chatRoomId;
+
 	const [user, me] = await Promise.all([
 		User.updateOne(
 			{ _id: req.params.userId },
@@ -202,7 +209,8 @@ router.post("/unfriend/:userId", async (req, res) => {
 		User.updateOne(
 			{ _id: myId },
 			{ $pull: { friends: { userId: req.params.userId } } }
-		)
+		),
+		ChatRoom.findByIdAndRemove(targetRoom)
 	]);
 
 	if (user.nModified === 0 || me.nModified === 0) {
@@ -213,21 +221,36 @@ router.post("/unfriend/:userId", async (req, res) => {
 	res.send("Deleted.");
 });
 
-// Get a list of friends: each friend containing a username, avatar and id
+// Get a list of friends
+// Each friend object contains a chatRoomId, used for private messaging
 router.get("/friends", async (req, res) => {
 	const myId = req.session.myId;
 
-	res.send(
-		removeUserPassword(
-			await User.find({
-				_id: {
-					$in: (await User.findById(myId)).friends.map(friend =>
-						String(friend.userId)
-					)
-				}
-			})
-		)
-	);
+	if (!myId) {
+		res.status(401).send("You need to login.");
+		return;
+	}
+
+	const myFriends = (await User.findById(myId)).friends;
+
+	// Get the User objects based on my friends list
+	let users = await User.find({
+		_id: {
+			$in: myFriends.map(friend => String(friend.userId))
+		}
+	})
+		.select("avatar username")
+		.lean();
+
+	// For each user, add a ChatRoomID from a corresponding friend object.
+	users = users.map(user => {
+		user.chatRoomId = myFriends.find(
+			friend => String(friend.userId) === String(user._id)
+		).chatRoomId;
+		return user;
+	});
+
+	res.send(users);
 });
 
 // Get pending friend requests
@@ -236,6 +259,7 @@ router.get("/requests", async (req, res) => {
 
 	if (!myId) {
 		res.status(401).send("You need to login.");
+		return;
 	}
 
 	res.send(

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axiosApp from "../utils/axiosConfig";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";
-
-const ENDPOINT = "http://localhost:5000";
 
 function App() {
 	const [loggedIn, setLoggedIn] = useState("loading");
@@ -20,7 +18,7 @@ function App() {
 		try {
 			setMyData(
 				(
-					await Axios.get(ENDPOINT + "/users/status", {
+					await axiosApp.get("/users/status", {
 						withCredentials: true
 					})
 				).data
@@ -57,10 +55,7 @@ function App() {
 					path="/login"
 					component={() => {
 						return redirectBasedOnStatus(
-							<LoginPage
-								ENDPOINT={ENDPOINT}
-								loginAttempt={updateLoggedIn}
-							/>,
+							<LoginPage loginAttempt={updateLoggedIn} />,
 							<Redirect to="/" />
 						);
 					}}
@@ -70,10 +65,7 @@ function App() {
 					path="/register"
 					component={() => {
 						return redirectBasedOnStatus(
-							<RegisterPage
-								ENDPOINT={ENDPOINT}
-								loginAttempt={updateLoggedIn}
-							/>,
+							<RegisterPage loginAttempt={updateLoggedIn} />,
 							<Redirect to="/" />
 						);
 					}}
@@ -84,7 +76,6 @@ function App() {
 						return redirectBasedOnStatus(
 							<Redirect to="/login" />,
 							<MainPage
-								ENDPOINT={ENDPOINT}
 								loggedIn={loggedIn}
 								myData={myData}
 								onLogout={updateLoggedIn}

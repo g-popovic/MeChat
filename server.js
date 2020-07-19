@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/user.routes");
+const chatRoutes = require("./routes/chat.routes");
 const postRoutes = require("./routes/post.routes");
 const session = require("express-session");
 const http = require("http");
@@ -12,6 +13,7 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+require("./socket/messaging")(io);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -57,16 +59,10 @@ app.get("/profile", (req, res) => {
 	}
 });
 
-// Web sockets for live chat
-io.on("connect", socket => {
-	socket.on("join", ({ room }) => {
-		console.log("connected");
-	});
-});
-
 // Connect routes
 app.use("/users/", userRoutes);
 app.use("/posts/", postRoutes);
+app.use("/chat/", chatRoutes);
 
 // Run server
 server.listen(process.env.PORT || 5000, () => {

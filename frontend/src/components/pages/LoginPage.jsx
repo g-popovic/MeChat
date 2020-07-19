@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 
 function LoginPage(props) {
 	const [username, setUsername] = useState("");
@@ -15,8 +15,8 @@ function LoginPage(props) {
 
 			try {
 				setWarning("");
-				await Axios.post(
-					props.ENDPOINT + "/users/login",
+				await axiosApp.post(
+					"/users/login",
 					{ username: username, password: password },
 					{ withCredentials: true }
 				);
@@ -36,13 +36,16 @@ function LoginPage(props) {
 	return (
 		<div className="login-container main-container">
 			<div className="login-logo">
-				<img src={require("../../images/assets/Logo.svg")} />
+				<img src={require("../../images/assets/Logo.svg")} alt="logo" />
 			</div>
 
 			<form className="login-form">
 				<div className="login-inputs-container">
 					<div className="username-input-container">
-						<img src={require("../../images/assets/Profile S.svg")} />
+						<img
+							src={require("../../images/assets/Profile S.svg")}
+							alt=""
+						/>
 						<input
 							placeholder="Username"
 							required
@@ -54,7 +57,10 @@ function LoginPage(props) {
 						/>
 					</div>
 					<div className="password-input-container">
-						<img src={require("../../images/assets/Password.svg")} />
+						<img
+							src={require("../../images/assets/Password.svg")}
+							alt=""
+						/>
 						<input
 							placeholder="Password"
 							required

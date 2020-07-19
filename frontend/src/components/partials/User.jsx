@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 import { Link } from "react-router-dom";
 
 function User(props) {
@@ -8,8 +8,8 @@ function User(props) {
 	async function sendRequest() {
 		setUserType("loading");
 		try {
-			await Axios.post(
-				props.ENDPOINT + "/users/send-request/" + props.id,
+			await axiosApp.post(
+				"/users/send-request/" + props.id,
 				{},
 				{ withCredentials: true }
 			);
@@ -22,8 +22,8 @@ function User(props) {
 	async function accept() {
 		setUserType("loading");
 		try {
-			await Axios.post(
-				props.ENDPOINT + "/users/accept/" + props.id,
+			await axiosApp.post(
+				"/users/accept/" + props.id,
 				{},
 				{ withCredentials: true }
 			);
@@ -36,8 +36,8 @@ function User(props) {
 	async function decline() {
 		setUserType("loading");
 		try {
-			await Axios.post(
-				props.ENDPOINT + "/users/unfriend/" + props.id,
+			await axiosApp.post(
+				"/users/unfriend/" + props.id,
 				{},
 				{ withCredentials: true }
 			);
@@ -54,6 +54,7 @@ function User(props) {
 				<img
 					className="user-avatar"
 					src={require("../../images/uploads/" + props.avatar)}
+					alt="user profile"
 				/>
 			</Link>
 			<div>
@@ -67,6 +68,7 @@ function User(props) {
 							className="friend-action-btn profile-action user-add-friend push-effect">
 							<img
 								src={require("../../images/assets/Add S D.svg")}
+								alt=""
 							/>
 							<p>ADD</p>
 						</button>

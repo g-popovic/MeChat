@@ -67,19 +67,6 @@ a {
 	outline: none;
 }
 
-::-webkit-scrollbar {
-	width: 0.6rem;
-}
-
-::-webkit-scrollbar-thumb {
-	background: #c2c2c2;
-	border-radius: 10rem;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background: #b1b1b1;
-}
-
 .hide-mobile {
 	display: none;
 }
@@ -101,7 +88,7 @@ a {
 	position: fixed;
 	left: 0;
 	right: 0;
-	top: 0;
+	top: -1px;
 	height: 3rem;
 }
 
@@ -114,6 +101,7 @@ a {
 	-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
 	box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
 	padding: 0.6rem 2.3rem;
+	z-index: 20;
 }
 
 .navbar ul {
@@ -155,8 +143,20 @@ a {
 	body {
 		background-color: #f6f6f6;
 	}
+	::-webkit-scrollbar {
+		width: 0.4rem;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #c2c2c2;
+		border-radius: 10rem;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #b1b1b1;
+	}
 	.navbar {
-		z-index: 10;
+		z-index: 20;
 		top: 0;
 		bottom: auto;
 		display: -webkit-box;
@@ -227,6 +227,14 @@ a {
 
 .friends-container {
 	padding: 3.8rem 1.2rem 3.5rem;
+	position: fixed;
+	overflow: auto;
+	z-index: 9;
+	background: white;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 .friends-container ul {
@@ -269,16 +277,19 @@ a {
 
 @media only screen and (min-width: 600px) {
 	.friends-container {
+		position: static;
 		padding: 0;
 		-ms-flex-preferred-size: 28%;
 		flex-basis: 28%;
 		height: 32rem;
 		z-index: 1;
 	}
-	.friends-container ::-webkit-scrollbar {
+	.friends-container,
+	.chat-box-container ::-webkit-scrollbar {
 		width: 0.4rem;
 	}
-	.friends-container ::-webkit-scrollbar-thumb {
+	.friends-container,
+	.chat-box-container ::-webkit-scrollbar-thumb {
 		background: #e0e0e0;
 		border-radius: 10rem;
 	}
@@ -956,6 +967,16 @@ a {
 	}
 }
 
+.chat-box-container {
+	position: fixed;
+	z-index: 25;
+	background: white;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
 .friend-chat-avatar {
 	width: 2.3rem;
 	height: 2.3rem;
@@ -980,24 +1001,27 @@ a {
 }
 
 .chat-container {
-	padding: 4.5rem 1.2rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 5rem 1rem;
+	height: 100%;
+	overflow: auto;
 }
 
 .chat-container p {
-	font-size: 1.2em;
+	font-size: 1.15em;
 	padding: 0.5rem 1rem;
-	margin-top: 0.3rem;
-	margin-bottom: 0.3rem;
+	margin: 0.3rem auto;
 	max-width: 75%;
+	width: fit-content;
 }
 
 .friend-message {
 	text-align: left;
 	background: #efefef;
 	border-radius: 1.1rem 1.1rem 1.1rem 0;
+	margin-left: 0 !important;
 }
 
 .my-message {
@@ -1005,14 +1029,17 @@ a {
 	background: #40c8b7;
 	border-radius: 1.1rem 1.1rem 0 1.1rem;
 	color: white;
-	margin-right: 0;
+	margin-right: 0 !important;
+}
+
+.new-sender {
+	margin-top: 1rem !important;
 }
 
 .send-message-container {
-	border-top: 1px #c1c1c1 solid;
+	border-top: 1px #e6e6e6 solid;
+	background: white;
 	padding: 0.8rem 1.5rem;
-	-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
-	box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -1051,18 +1078,26 @@ a {
 		position: fixed;
 		bottom: 0;
 		right: 7rem;
+		left: auto;
+		top: auto;
+		background: none;
 		z-index: 8;
 		background: white;
 		border-radius: 1rem 1rem 0 0;
 		width: 20rem;
-		-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
-		box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.05);
-		border: 1px solid #dadada;
+		-webkit-box-shadow: 0px 0px 50px 0 rgba(0, 0, 0, 0);
+		box-shadow: 0px 0px 50px 0 rgba(0, 0, 0, 0);
 	}
 	.chat-container {
-		overflow: auto;
+		position: relative;
+		z-index: -1;
 		height: 20rem;
-		padding: 0 1rem;
+		padding: 0.5rem 1rem;
+		border-left: 1px solid #dadada;
+		border-right: 1px solid #dadada;
+	}
+	.chat-container p {
+		font-size: 0.95em;
 	}
 	.nav-mobile-chat {
 		position: static;
@@ -1086,14 +1121,13 @@ a {
 	}
 	.send-message-container {
 		position: static;
+		border-left: 1px solid #dadada;
+		border-right: 1px solid #dadada;
 		background: white;
 	}
 	.send-message-container input {
 		font-size: 0.9em;
 		padding: 0.35rem 1rem 0.45rem;
-	}
-	.message-container p {
-		font-size: 0.95em;
 	}
 	.minimize-chat div {
 		display: none;
@@ -1293,7 +1327,7 @@ a {
 
 @keyframes Slide_Up {
 	0% {
-		transform: translateY(20rem);
+		transform: translateY(25rem);
 	}
 	100% {
 		transform: translateY(0);
@@ -1407,6 +1441,16 @@ a {
 	100% {
 		transform: scale(1);
 	}
+}
+
+.feed-label {
+	padding: 0 12.5% 2rem;
+	margin: -1rem auto 1rem;
+	border-bottom: 1px solid #d5d5d5;
+}
+
+.friends-open {
+	animation: Slide_Up 0.3s ease;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,15 +1,15 @@
 import React from "react";
 
-function Friend() {
+function Friend(props) {
 	return (
-		<li className="friend">
+		<li onClick={() => props.openChat(props)} className="friend">
 			<img
-				src={require("../../images/uploads/default-avatar.svg")}
+				src={require("../../images/uploads/" + props.avatar)}
 				alt="user avatar"
 			/>
 			<span>
-				<p className="friend-name">Michael Jackson</p>
-				<p className="last-message">Hey man whatsup!</p>
+				<p className="friend-name">{props.username}</p>
+				<p className="last-message">Open Chat</p>
 			</span>
 		</li>
 	);

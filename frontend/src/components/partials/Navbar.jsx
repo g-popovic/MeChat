@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import axiosApp from "../../utils/axiosConfig";
 
 function Navbar(props) {
 	const [newPostOpen, setNewPostOpen] = useState(false);
@@ -14,8 +14,8 @@ function Navbar(props) {
 	async function submitPost() {
 		if (postContent) {
 			try {
-				await Axios.post(
-					props.ENDPOINT + "/posts/new-post",
+				await axiosApp.post(
+					"/posts/new-post",
 					{ content: postContent },
 					{ withCredentials: true }
 				);
@@ -30,13 +30,17 @@ function Navbar(props) {
 		<>
 			<nav className="navbar">
 				<Link className="logo hide-mobile" to="/">
-					<img src={require("../../images/assets/Logo.svg")} />
+					<img
+						src={require("../../images/assets/Logo.svg")}
+						alt="logo"
+					/>
 				</Link>
 				<ul>
 					<li className="nav-home">
 						<Link className="navbar-link" to="/">
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Home.svg")}
+								alt="home icon"
 							/>
 							<p className="hide-mobile">HOME</p>
 						</Link>
@@ -45,6 +49,7 @@ function Navbar(props) {
 						<a onClick={toggleNewPost}>
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Add Post.svg")}
+								alt="new post button"
 							/>
 							<p className="hide-mobile">NEW POST</p>
 						</a>
@@ -53,14 +58,16 @@ function Navbar(props) {
 						<Link className="navbar-link" to="/search">
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Add Friend.svg")}
+								alt="add friend button"
 							/>
 							<p className="hide-mobile">ADD FRIEND</p>
 						</Link>
 					</li>
 					<li className="nav-chat hide-desktop">
-						<a>
+						<a onClick={props.toggleFriendsPanel}>
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Chat L.svg")}
+								alt="chat button"
 							/>
 						</a>
 					</li>
@@ -70,6 +77,7 @@ function Navbar(props) {
 						<img
 							src={require("../../images/uploads/" +
 								props.myData.avatar)}
+							alt="my profile picture"
 						/>
 					</Link>
 				</ul>
