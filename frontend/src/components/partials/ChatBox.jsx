@@ -14,7 +14,7 @@ function ChatBox(props) {
 	const [firstScroll, setFirstScroll] = useState(0); // For determening scroll smoothness
 
 	useEffect(() => {
-		socket = io("localhost:5000");
+		socket = io("me-chat.herokuapp.com");
 
 		socket.emit("join", { name: props.username, room: props.chatRoomId });
 
