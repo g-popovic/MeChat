@@ -9,6 +9,7 @@ const session = require("express-session");
 const http = require("http");
 const socketio = require("socket.io");
 const path = require("path");
+const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
 
 const app = express();
@@ -33,7 +34,11 @@ app.use(
 		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
+		store: new MemoryStore({
+			checkPeriod: 1000 * 60 * 60 * 24
+		}),
 		cookie: {
+			secure: true,
 			maxAge: 1000 * 60 * 60 * 24 * 30 * 6
 		}
 	})
@@ -57,7 +62,7 @@ app.use("/posts/", postRoutes);
 app.use("/chat/", chatRoutes);
 
 if (process.env.NODE_ENV === "production") {
-	app.use(express.stasic("frontend/build"));
+	app.use(express.static("frontend/build"));
 
 	app.get("*", (req, res) => {
 		res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
