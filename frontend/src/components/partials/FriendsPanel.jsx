@@ -48,7 +48,7 @@ function FriendsPanel(props) {
 				<ul>
 					{friends === "loading" ? (
 						<PageLoading />
-					) : friends.length === 0 ? (
+					) : !friends.length ? (
 						<div className="no-friends">
 							<p>You don't have any friends. Bummer!</p>
 							<Link to="/search">Add Friends</Link>
@@ -56,6 +56,7 @@ function FriendsPanel(props) {
 					) : (
 						friends.map(friend => (
 							<Friend
+								key={friend._id}
 								id={friend._id}
 								username={friend.username}
 								avatar={friend.avatar}

@@ -23,7 +23,7 @@ app.use(
 		credentials: true,
 		origin:
 			process.env.NODE_ENV === "production"
-				? "http://localhost:3000"
+				? "https://me-chat.herokuapp.com"
 				: "http://localhost:3000"
 	})
 );
@@ -48,15 +48,6 @@ mongoose.connect(process.env.ATLAS_URI, {
 mongoose.connection.on("open", err => {
 	if (err) console.log(err);
 	else console.log("Connected to MongoDB successful.");
-});
-
-// Session authentication test route
-app.get("/profile", (req, res) => {
-	if (req.session.myId) {
-		res.send("Welcome aboard, captain. All systems online.");
-	} else {
-		res.send("Access denied.");
-	}
 });
 
 // Connect routes

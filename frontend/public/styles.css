@@ -284,11 +284,11 @@ a {
 		height: 32rem;
 		z-index: 1;
 	}
-	.friends-container,
+	.friends-container ::-webkit-scrollbar,
 	.chat-box-container ::-webkit-scrollbar {
 		width: 0.4rem;
 	}
-	.friends-container,
+	.friends-container ::-webkit-scrollbar-thumb,
 	.chat-box-container ::-webkit-scrollbar-thumb {
 		background: #e0e0e0;
 		border-radius: 10rem;
@@ -349,7 +349,10 @@ a {
 }
 
 .posts-container {
+	height: 100vh;
+	overflow: auto;
 	padding: 4.5rem 1.2rem 3.5rem;
+	box-sizing: border-box;
 }
 
 .posts-container .post {
@@ -436,6 +439,8 @@ a {
 @media only screen and (min-width: 600px) {
 	.posts-container {
 		padding: 3rem 0;
+		overflow: visible;
+		height: auto;
 	}
 	.posts-container .post:first-child {
 		padding-top: 0;
@@ -460,6 +465,12 @@ a {
 	}
 }
 
+.profile-container {
+	height: 100vh;
+	overflow: auto;
+	box-sizing: border-box;
+}
+
 .nav-mobile-profile {
 	text-align: center;
 	-webkit-box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.08);
@@ -472,7 +483,7 @@ a {
 	height: 9rem;
 	margin: 0;
 	overflow: hidden;
-	background-image: url(https://source.unsplash.com/collection/8994315/);
+	background-image: url(https://source.unsplash.com/photos/query/wallpaper);
 	background-position: bottom;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -486,6 +497,8 @@ a {
 
 .profile-posts {
 	padding-top: 1rem;
+	height: auto;
+	overflow: visible;
 }
 
 .profile-avatar {
@@ -667,6 +680,10 @@ a {
 }
 
 @media only screen and (min-width: 600px) {
+	.profile-container {
+		overflow: visible;
+		height: auto;
+	}
 	.nav-mobile-profile {
 		-webkit-box-shadow: none;
 		box-shadow: none;
@@ -1025,7 +1042,7 @@ a {
 }
 
 .my-message {
-	text-align: right;
+	text-align: left;
 	background: #40c8b7;
 	border-radius: 1.1rem 1.1rem 0 1.1rem;
 	color: white;
@@ -1112,7 +1129,7 @@ a {
 	.nav-mobile-chat .chat-minimize img {
 		margin-left: 0.3rem;
 		margin-top: 0.4rem;
-		width: 1.5rem;
+		width: 1.2rem;
 	}
 	.nav-mobile-chat span {
 		font-size: 0.9em;
@@ -1279,7 +1296,7 @@ a {
 		-ms-flex-pack: justify;
 		justify-content: space-between;
 		width: 87%;
-		margin: 8.7rem auto 2rem;
+		margin: 6.7rem auto 2rem;
 	}
 	.main-container {
 		background: white;
@@ -1316,13 +1333,18 @@ a {
 
 .new-post-container {
 	position: fixed;
-	z-index: 20;
+	z-index: 100;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	background-color: rgba(0, 0, 0, 0.5);
 	text-align: center;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 @keyframes Slide_Up {
@@ -1335,7 +1357,7 @@ a {
 }
 
 .new-post {
-	margin: 14rem auto;
+	margin: auto;
 	background: white;
 	width: 90%;
 	padding: 2.5rem 0;
@@ -1451,6 +1473,20 @@ a {
 
 .friends-open {
 	animation: Slide_Up 0.3s ease;
+}
+
+.no-friends {
+	margin-top: 45%;
+	text-align: center;
+	font-size: 1.1em;
+}
+
+.no-friends p {
+	color: #848484;
+}
+
+.no-friends a {
+	color: #0a97b0;
 }
 
 /*# sourceMappingURL=styles.css.map */

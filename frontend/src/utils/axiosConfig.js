@@ -1,11 +1,9 @@
 import Axios from "axios";
 
-const env = process.env.NODE_ENV;
-
 const axiosApp = Axios.create({
 	baseURL:
-		env === "production"
-			? "https://deployed-app-url.com"
+		process.env.NODE_ENV === "production"
+			? "https://me-chat.herokuapp.com"
 			: "http://localhost:5000"
 });
 

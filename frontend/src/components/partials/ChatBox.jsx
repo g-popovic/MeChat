@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import axiosApp from "../../utils/axiosConfig";
@@ -9,6 +9,9 @@ let socket;
 function ChatBox(props) {
 	const [messages, setMessages] = useState("loading");
 	const [newMessage, setNewMessage] = useState("");
+	const messagesEnd = document.getElementById("lastMessage");
+
+	const [firstScroll, setFirstScroll] = useState(0); // For determening scroll smoothness
 
 	useEffect(() => {
 		socket = io("localhost:5000");
@@ -29,6 +32,7 @@ function ChatBox(props) {
 	}, []);
 
 	useEffect(() => {
+		setMessages("loading");
 		async function getOldMessages() {
 			setMessages(
 				(
@@ -40,7 +44,7 @@ function ChatBox(props) {
 		}
 
 		getOldMessages();
-	}, []);
+	}, [props.id]);
 
 	function sendMessage() {
 		if (
@@ -60,6 +64,37 @@ function ChatBox(props) {
 		}
 	}
 
+	function renderMessages() {
+		return messages.map((message, index) => (
+			<p
+				className={
+					(message.author === props.myData.id
+						? "my-message"
+						: "friend-message") +
+					(index === 0
+						? ""
+						: messages[index - 1].author !== message.author
+						? " new-sender"
+						: "")
+				}>
+				{message.text}
+			</p>
+		));
+	}
+
+	function scrollToBottom(behavior) {
+		if (messagesEnd) messagesEnd.scrollIntoView({ behavior: behavior });
+	}
+
+	useEffect(() => {
+		if (firstScroll < 2) {
+			scrollToBottom("instant");
+			setFirstScroll(prev => prev + 1);
+		} else {
+			scrollToBottom("smooth");
+		}
+	}, [messages]);
+
 	return (
 		<div className="chat-box-container">
 			<nav className="nav-mobile-chat nav-mobile">
@@ -71,7 +106,7 @@ function ChatBox(props) {
 				</a>
 				<a onClick={props.closeChat} className="hide-mobile chat-minimize">
 					<img
-						src={require("../../images/assets/Minimize Icon.svg")}
+						src={require("../../images/assets/Cancel D White.svg")}
 						alt="minimize icon"
 					/>
 				</a>
@@ -88,25 +123,8 @@ function ChatBox(props) {
 			</nav>
 
 			<div className="chat-container">
-				{messages === "loading" ? (
-					<PageLoading />
-				) : (
-					messages.map((message, index) => (
-						<p
-							className={
-								(message.author === props.myData.id
-									? "my-message"
-									: "friend-message") +
-								(index == 0
-									? ""
-									: messages[index - 1].author !== message.author
-									? " new-sender"
-									: "")
-							}>
-							{message.text}
-						</p>
-					))
-				)}
+				{messages === "loading" ? <PageLoading /> : renderMessages()}
+				<div id="lastMessage"></div>
 			</div>
 
 			<div className="send-message-container">
@@ -116,7 +134,7 @@ function ChatBox(props) {
 						if (e.key === "Enter") sendMessage();
 					}}
 					type="text"
-					autocomplete="off"
+					autoComplete="off"
 					autoFocus
 					placeholder="Type Message"
 					value={newMessage}
