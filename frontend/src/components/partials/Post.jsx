@@ -5,37 +5,34 @@ import moment from "moment";
 
 function Post(props) {
 	const [liked, setLiked] = useState(props.likes.includes(props.myData.id));
-	const [loading, setLoading] = useState(false);
 	const [likeCount, setLikeCount] = useState(props.likes.length);
 
 	async function likeUnlike() {
-		if (!loading) {
-			try {
-				if (liked) {
-					// Unlike the post
-					setLiked(false);
-					setLikeCount(prevVal => prevVal - 1);
+		try {
+			if (liked) {
+				// Unlike the post
+				setLiked(false);
+				setLikeCount(prevVal => prevVal - 1);
 
-					await axiosApp.post(
-						"/posts/unlike/" + props.id,
-						{},
-						{ withCredentials: true }
-					);
-				} else {
-					// Like the post
-					setLiked(true);
-					setLikeCount(prevVal => prevVal + 1);
+				await axiosApp.post(
+					"/posts/unlike/" + props.id,
+					{},
+					{ withCredentials: true }
+				);
+			} else {
+				// Like the post
+				setLiked(true);
+				setLikeCount(prevVal => prevVal + 1);
 
-					await axiosApp.post(
-						"/posts/like/" + props.id,
-						{},
-						{ withCredentials: true }
-					);
-				}
-			} catch (err) {
-				console.log(err);
-				window.location.reload();
+				await axiosApp.post(
+					"/posts/like/" + props.id,
+					{},
+					{ withCredentials: true }
+				);
 			}
+		} catch (err) {
+			console.log(err);
+			window.location.reload();
 		}
 	}
 

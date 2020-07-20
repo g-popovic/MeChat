@@ -14,9 +14,17 @@ function MainPage(props) {
 		setFriendsPanelOpen(prev => !prev);
 	}
 
+	function closeFriends() {
+		setFriendsPanelOpen(false);
+	}
+
 	return (
 		<BrowserRouter>
-			<Navbar myData={props.myData} toggleFriendsPanel={togglePanel} />
+			<Navbar
+				myData={props.myData}
+				toggleFriendsPanel={togglePanel}
+				closeFriendsPanel={closeFriends}
+			/>
 			<div className="panels-container">
 				<FriendsPanel
 					myData={props.myData}

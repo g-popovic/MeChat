@@ -483,7 +483,7 @@ a {
 	height: 9rem;
 	margin: 0;
 	overflow: hidden;
-	background-image: url(https://source.unsplash.com/photos/query/wallpaper);
+	background-image: url(https://source.unsplash.com/photos/random);
 	background-position: bottom;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -1473,10 +1473,6 @@ a {
 	padding: 0 12.5% 2rem;
 	margin: -1rem auto 1rem;
 	border-bottom: 1px solid #d5d5d5;
-}
-
-.friends-open {
-	animation: Slide_Up 0.3s ease;
 }
 
 .no-friends {

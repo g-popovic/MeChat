@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import axiosApp from "../../utils/axiosConfig";
 
 import PageLoading from "./PageLoading";
-import Post from "./Post";
+import RenderPosts from "./RenderPosts";
 
 function Profile(props) {
 	const { userId } = useParams();
 	const [profileData, setProfileData] = useState("loading");
-	const [posts, setPostData] = useState("loading");
+	const [posts, setPosts] = useState("loading");
 	const [notFound, setNotFound] = useState(false);
 	const [userType, setUserType] = useState(null);
 
@@ -44,7 +44,17 @@ function Profile(props) {
 
 			setProfileData(data);
 
-			setPostData(postsData.data.reverse());
+			setPosts(
+				postsData.data
+					.map(post => {
+						post.authorAvatar = data.avatar;
+						post.authorName = data.username;
+						post.authorId = props.myData.id;
+						post.postId = post._id;
+						return post;
+					})
+					.reverse()
+			);
 		} catch (err) {
 			console.log("Cought error: ", err);
 			setNotFound(true);
@@ -178,22 +188,11 @@ function Profile(props) {
 					<p className="search-message">This user has not posts</p>
 				) : (
 					<div className="posts-container profile-posts">
-						{posts.map(post => (
-							<Post
-								key={post._id}
-								myData={props.myData}
-								authorId={post.authorId}
-								id={post._id}
-								author={profileData.username}
-								avatar={profileData.avatar}
-								content={post.content}
-								likes={post.likes}
-								date={post.date}
-							/>
-						))}
+						<RenderPosts posts={posts} myData={props.myData} />
 					</div>
 				)}
 			</div>
+
 			<div className={"new-post-container" + (uploadOpen ? "" : " hide")}>
 				<div className="new-post upload-avatar">
 					<h1>Upload Photo</h1>

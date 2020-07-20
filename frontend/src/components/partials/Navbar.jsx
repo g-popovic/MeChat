@@ -37,7 +37,10 @@ function Navbar(props) {
 				</Link>
 				<ul>
 					<li className="nav-home">
-						<Link className="navbar-link" to="/">
+						<Link
+							onClick={props.closeFriendsPanel}
+							className="navbar-link"
+							to="/">
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Home.svg")}
 								alt="home icon"
@@ -55,7 +58,10 @@ function Navbar(props) {
 						</a>
 					</li>
 					<li className="nav-add-friend">
-						<Link className="navbar-link" to="/search">
+						<Link
+							onClick={props.closeFriendsPanel}
+							className="navbar-link"
+							to="/search">
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Add Friend.svg")}
 								alt="add friend button"

@@ -50,11 +50,18 @@ router.post("/unlike/:postId", async (req, res) => {
 // Get all posts from a specific user
 router.get("/author/:userId", async (req, res) => {
 	try {
-		const result = await Post.find({ author: req.params.userId }).limit(20);
+		const posts = await Post.find({ author: req.params.userId })
+			.limit(20)
+			.lean();
 
-		if (!result) throw new Error(404, "User not found.");
+		if (!posts) throw new Error(404, "User not found.");
 
-		res.send(result);
+		res.send(
+			posts.map(post => {
+				post.date = post.createdAt;
+				return post;
+			})
+		);
 	} catch (err) {
 		res.send(err);
 	}

@@ -3,7 +3,7 @@ import axiosApp from "../../utils/axiosConfig";
 import { Link } from "react-router-dom";
 
 import PageLoading from "./PageLoading";
-import Post from "./Post";
+import RenderPosts from "./RenderPosts";
 
 function PostsContainer(props) {
 	const [posts, setPosts] = useState("loading");
@@ -31,19 +31,7 @@ function PostsContainer(props) {
 			{posts === "loading" ? (
 				<PageLoading />
 			) : (
-				posts.map(post => (
-					<Post
-						key={post.postId}
-						myData={props.myData}
-						authorId={post.authorId}
-						id={post.postId}
-						author={post.authorName}
-						avatar={post.authorAvatar}
-						content={post.content}
-						likes={post.likes}
-						date={post.date}
-					/>
-				))
+				<RenderPosts posts={posts} myData={props.myData} />
 			)}
 		</div>
 	);
