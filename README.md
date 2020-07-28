@@ -5,4 +5,4 @@
 * User authentication
 * Friends system
 * Upload posts
-* Like/Unlike other peoples posts
+* Like/Unlike other people's posts
