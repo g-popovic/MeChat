@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosApp from "../../utils/axiosConfig";
+import axios from "axios";
 
 import PageLoading from "./PageLoading";
 import RenderPosts from "./RenderPosts";
@@ -108,9 +109,9 @@ function Profile(props) {
 			}
 
 			try {
-				getSignedRequest();
+				getSignedRequest(selectedFile);
 
-				props.onLogout();
+				props.onLogout(); // Refreshes the page so the user sees the Avatar change
 			} catch (err) {
 				console.log(err);
 				setUploadOpen(false);
@@ -120,36 +121,26 @@ function Profile(props) {
 		e.preventDefault();
 	}
 
-	function getSignedRequest(file) {
-		const xhr = new XMLHttpRequest();
-		xhr.open("GET", `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
-					const response = JSON.parse(xhr.responseText);
-					uploadFile(file, response.signedRequest, response.url);
-				} else {
-					alert("Could not get signed URL.");
-				}
-			}
-		};
-		xhr.send();
+	async function getSignedRequest(file) {
+		try {
+			const result = await axiosApp.get(
+				`/sign-s3?file-name=${file.name}&file-type=${file.type}`
+			);
+			uploadFile(selectedFile, result.data.signedRequest, result.data.url);
+		} catch (err) {
+			console.log(err);
+			alert("Oops! There was an unexpected error.");
+		}
 	}
 
-	function uploadFile(file, signedRequest, url) {
-		const xhr = new XMLHttpRequest();
-		xhr.open("PUT", signedRequest);
-		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
-					document.getElementById("preview").src = url;
-					document.getElementById("avatar-url").value = url;
-				} else {
-					alert("Could not upload file.");
-				}
-			}
-		};
-		xhr.send(file);
+	async function uploadFile(file, signedRequest, url) {
+		try {
+			const response = await axios.put(signedRequest, file);
+			console.log(response);
+		} catch (err) {
+			console.log(err);
+			alert("There was an error uploading the file.");
+		}
 	}
 
 	return (

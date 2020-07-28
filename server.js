@@ -11,6 +11,7 @@ const socketio = require("socket.io");
 const path = require("path");
 const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
+const aws = require("aws-sdk");
 
 const app = express();
 const server = http.createServer(app);
@@ -53,6 +54,35 @@ mongoose.connect(process.env.ATLAS_URI, {
 mongoose.connection.on("open", err => {
 	if (err) console.log(err);
 	else console.log("Connected to MongoDB successful.");
+});
+
+// Set up AWS S3
+aws.config.region = "eu-west-2";
+app.get("/sign-s3", (req, res) => {
+	const s3 = new aws.S3();
+	const S3_BUCKET = process.env.S3_BUCKET;
+	const fileName = req.query["file-name"];
+	const fileType = req.query["file-type"];
+	const s3Params = {
+		Bucket: S3_BUCKET,
+		Key: fileName,
+		Expires: 60,
+		ContentType: fileType,
+		ACL: "public-read"
+	};
+
+	s3.getSignedUrl("putObject", s3Params, (err, data) => {
+		if (err) {
+			console.log(err);
+			return res.end();
+		}
+		const returnData = {
+			signedRequest: data,
+			url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+		};
+		res.write(JSON.stringify(returnData));
+		res.end();
+	});
 });
 
 // Connect routes
