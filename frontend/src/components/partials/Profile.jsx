@@ -107,10 +107,8 @@ function Profile(props) {
 				alert("File too large. Please select a file under 1MB");
 				return;
 			}
-
 			try {
 				getSignedRequest(selectedFile);
-
 				props.onLogout(); // Refreshes the page so the user sees the Avatar change
 			} catch (err) {
 				console.log(err);
@@ -134,9 +132,13 @@ function Profile(props) {
 	}
 
 	async function uploadFile(file, signedRequest, url) {
+		console.log(signedRequest, file);
 		try {
-			const response = await axios.put(signedRequest, file);
-			console.log(response);
+			var options = {
+				headers: { "Content-Type": file.type, "x-amz-acl": "public-read" }
+			};
+			const response = await axios.put(signedRequest, file, options);
+			console.log(response, url);
 		} catch (err) {
 			console.log(err);
 			alert("There was an error uploading the file.");

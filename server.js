@@ -59,7 +59,6 @@ mongoose.connection.on("open", err => {
 // Set up AWS S3
 aws.config.region = "eu-west-2";
 app.get("/sign-s3", (req, res) => {
-	const s3 = new aws.S3();
 	const S3_BUCKET = process.env.S3_BUCKET;
 	const fileName = req.query["file-name"];
 	const fileType = req.query["file-type"];
@@ -70,6 +69,11 @@ app.get("/sign-s3", (req, res) => {
 		ContentType: fileType,
 		ACL: "public-read"
 	};
+
+	const s3 = new aws.S3({
+		accessKeyId: process.env.USER_ACCESS_KEY_ID,
+		secretAccessKey: process.env.USER_SECRET_ACCESS_KEY
+	});
 
 	s3.getSignedUrl("putObject", s3Params, (err, data) => {
 		if (err) {
