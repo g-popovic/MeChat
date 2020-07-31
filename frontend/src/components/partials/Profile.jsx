@@ -143,6 +143,9 @@ function Profile(props) {
 				{ withCredentials: true }
 			);
 			props.onLogout(); // Refreshes the page so the user sees the Avatar change
+			alert(
+				"Profile photo updated! You may need to wait a minute to see the changes."
+			);
 		} catch (err) {
 			console.log(err);
 			alert("There was an error uploading the file.");

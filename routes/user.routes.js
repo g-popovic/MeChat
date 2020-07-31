@@ -2,35 +2,10 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const ChatRoom = require("../models/chatRoom.model");
-const multer = require("multer");
 const aws = require("aws-sdk");
 const mongoose = require("mongoose");
 
-// Image uploading
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, "./frontend/src/images/uploads");
-	},
-	filename: function (req, file, cb) {
-		cb(null, req.session.myId + "-avatar.jpg");
-	}
-});
-const fileFilter = (req, file, cb) => {
-	if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-		cb(null, true);
-	} else {
-		cb(null, false);
-	}
-};
-const upload = multer({
-	storage: storage,
-	limits: { fileFilter: 1024 * 1024 },
-	fileFilter: fileFilter
-});
-
 // ################################# ROUTES #################################
-
-// TODO: Add authentication check for routes that require it
 
 // Register a new user
 router.post("/register", async (req, res) => {
@@ -50,7 +25,7 @@ router.post("/register", async (req, res) => {
 
 		res.status(200).send("Logged in as " + username);
 	} catch (err) {
-		if (err.code === 11000) res.status(400).send("Username already taken.");
+		if (err.code === 11000) res.status(403).send("Username already taken.");
 		else res.send(err);
 	}
 });
@@ -61,7 +36,10 @@ router.post("/login", async (req, res) => {
 	password = req.body.password;
 
 	const user = await User.findOne({ username: username });
-	if (!user) res.status(401).send("Incorrect username.");
+	if (!user) {
+		res.status(401).send("Incorrect username.");
+		return;
+	}
 
 	if (await bcrypt.compare(password, user.password)) {
 		req.session.myId = user._id;
@@ -232,7 +210,9 @@ router.get("/friends", async (req, res) => {
 		return;
 	}
 
-	const myFriends = (await User.findById(myId)).friends;
+	const myFriends = (await User.findById(myId)).friends.filter(
+		friend => friend.status === "friends"
+	);
 
 	// Get the User objects based on my friends list
 	let users = await User.find({

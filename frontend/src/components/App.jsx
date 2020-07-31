@@ -34,11 +34,13 @@ function App() {
 
 	function redirectBasedOnStatus(componentIfLoggedOut, componentIfLoggedIn) {
 		return loggedIn === "loading" ? (
-			<img
-				className="loading center-screen"
-				src={require("../images/assets/Loading.svg")}
-				alt="loading"
-			/>
+			<div className="center-screen">
+				<img
+					className="loading"
+					src={require("../images/assets/Loading.svg")}
+					alt="loading"
+				/>
+			</div>
 		) : !loggedIn ? (
 			componentIfLoggedOut
 		) : (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosApp from "../../utils/axiosConfig";
 
@@ -25,7 +25,11 @@ function RegisterPage(props) {
 				await props.loginAttempt();
 			} catch (err) {
 				console.log(err);
-				alert("Oops! Something went wrong.");
+				if (err.response !== undefined && err.response.status === 403) {
+					setWarning("Username already taken.");
+				} else {
+					alert("Oops! Something went wrong.");
+				}
 			}
 		} else if (username.length && password.length && confirm.length) {
 			e.preventDefault();
@@ -34,14 +38,13 @@ function RegisterPage(props) {
 		setLoading(false);
 	}
 
-	function changeConfirm(e) {
-		setConfirm(e.target.value);
-		if (password !== e.target.value) {
+	useEffect(() => {
+		if (confirm.length && password !== confirm) {
 			setWarning("Passwords don't match");
 		} else {
 			setWarning("");
 		}
-	}
+	}, [confirm, password]);
 
 	return (
 		<div className="login-container center-screen main-container">
@@ -89,12 +92,12 @@ function RegisterPage(props) {
 							required
 							type="password"
 							value={confirm}
-							onChange={changeConfirm}
+							onChange={e => setConfirm(e.target.value)}
 						/>
 					</div>
 				</div>
 
-				<p className="login-warning register-warning">{warning}</p>
+				<p className="login-warning">{warning}</p>
 
 				<button
 					onClick={register}

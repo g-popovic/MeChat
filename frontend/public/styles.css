@@ -6,9 +6,6 @@ body {
 
 /* LOADING ANIMATION */
 .loading {
-	text-align: center;
-	margin: 19rem auto 0;
-	display: block;
 	width: 5rem;
 
 	-webkit-animation: spin 1.5s linear infinite;
@@ -18,34 +15,43 @@ body {
 
 .loading-search {
 	width: 3rem;
-	margin-top: 3rem;
+	display: block;
+	margin: 5rem auto;
 }
 
 @media only screen and (min-width: 600px) {
 	.loading {
-		margin: 14rem auto 0;
-		width: 9rem;
+		width: 8rem;
 	}
 
 	.loading-search {
 		width: 4rem;
-		margin-top: 3rem;
+		margin-top: 5rem;
 	}
 }
 
 @-webkit-keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
 	100% {
 		-webkit-transform: rotate(360deg);
 	}
 }
 @-moz-keyframes spin {
+	0% {
+		-moz-transform: rotate(0deg);
+	}
 	100% {
-		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
 	}
 }
 @keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
 	100% {
-		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
 	}
 }
 
@@ -356,7 +362,7 @@ a {
 }
 
 .posts-container .post {
-	border-bottom: 1px solid #d5d5d5;
+	border-bottom: 1px solid #e7e7e7;
 	padding: 1.1rem 0;
 }
 
@@ -1227,14 +1233,9 @@ a {
 .login-warning {
 	color: #f30000;
 	font-size: 1.1em;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 25rem;
-}
-
-.register-warning {
-	top: 29rem;
+	position: relative;
+	bottom: 1.5rem;
+	margin: 1rem auto;
 }
 
 @media only screen and (min-width: 600px) {
@@ -1276,7 +1277,6 @@ a {
 		font-size: 0.85em;
 	}
 	.login-warning {
-		top: 19.5rem;
 		font-size: 1em;
 	}
 	.register-warning {
