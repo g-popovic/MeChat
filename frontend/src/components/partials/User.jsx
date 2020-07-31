@@ -53,7 +53,10 @@ function User(props) {
 			<Link to={"/profile/" + props.id}>
 				<img
 					className="user-avatar"
-					src={require("../../images/uploads/" + props.avatar)}
+					src={
+						"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+						props.avatar
+					}
 					alt="user profile"
 				/>
 			</Link>

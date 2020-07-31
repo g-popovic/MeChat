@@ -10,6 +10,8 @@ function App() {
 	const [loggedIn, setLoggedIn] = useState("loading");
 	const [myData, setMyData] = useState({});
 
+	console.log("App Refreshed");
+
 	useEffect(() => {
 		updateLoggedIn();
 	}, []);
@@ -33,7 +35,7 @@ function App() {
 	function redirectBasedOnStatus(componentIfLoggedOut, componentIfLoggedIn) {
 		return loggedIn === "loading" ? (
 			<img
-				className="loading"
+				className="loading center-screen"
 				src={require("../images/assets/Loading.svg")}
 				alt="loading"
 			/>

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const ChatRoom = require("../models/chatRoom.model");
 const multer = require("multer");
+const aws = require("aws-sdk");
 const mongoose = require("mongoose");
 
 // Image uploading
@@ -290,18 +291,47 @@ router.get("/find/:username", async (req, res) => {
 	res.send(removeUserPassword(users));
 });
 
-// Upload an avatar for a user
-router.post("/avatar", upload.single("avatar"), async (req, res) => {
-	try {
-		const result = await User.updateOne(
-			{ _id: req.session.myId },
-			{ avatar: req.file.filename }
-		);
-		req.session.myAvatar = req.file.filename;
-		res.send(result);
-	} catch (err) {
-		res.status(400).send("Something went wrong. Please try again");
-	}
+// Get a signed request for uploading avatar
+aws.config.region = "eu-west-2";
+router.get("/sign-s3", (req, res) => {
+	const S3_BUCKET = process.env.S3_BUCKET;
+	const fileName = req.query["file-name"];
+	const fileType = req.query["file-type"];
+	const myId = req.session.myId;
+	const s3Params = {
+		Bucket: S3_BUCKET,
+		Key: myId + "-avatar.jpg",
+		Expires: 60,
+		ContentType: fileType,
+		ACL: "public-read"
+	};
+
+	const s3 = new aws.S3({
+		accessKeyId: process.env.USER_ACCESS_KEY_ID,
+		secretAccessKey: process.env.USER_SECRET_ACCESS_KEY
+	});
+
+	s3.getSignedUrl("putObject", s3Params, (err, data) => {
+		if (err) {
+			console.log(err);
+			return res.end();
+		}
+		const returnData = {
+			signedRequest: data,
+			url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+		};
+
+		res.write(JSON.stringify(returnData));
+		res.end();
+	});
+});
+
+router.patch("/update-user-avatar", async (req, res) => {
+	const myId = req.session.myId;
+	const newAvatarUrl = myId + "-avatar.jpg";
+	await User.findOneAndUpdate({ _id: myId }, { avatar: newAvatarUrl });
+	req.session.myAvatar = newAvatarUrl;
+	res.send();
 });
 
 // Processes an array of users and returns them without a password (for security)

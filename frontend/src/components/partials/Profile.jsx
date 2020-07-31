@@ -109,7 +109,6 @@ function Profile(props) {
 			}
 			try {
 				getSignedRequest(selectedFile);
-				props.onLogout(); // Refreshes the page so the user sees the Avatar change
 			} catch (err) {
 				console.log(err);
 				setUploadOpen(false);
@@ -122,7 +121,8 @@ function Profile(props) {
 	async function getSignedRequest(file) {
 		try {
 			const result = await axiosApp.get(
-				`/sign-s3?file-name=${file.name}&file-type=${file.type}`
+				`/users/sign-s3?file-name=${file.name}&file-type=${file.type}`,
+				{ withCredentials: true }
 			);
 			uploadFile(selectedFile, result.data.signedRequest, result.data.url);
 		} catch (err) {
@@ -132,13 +132,17 @@ function Profile(props) {
 	}
 
 	async function uploadFile(file, signedRequest, url) {
-		console.log(signedRequest, file);
 		try {
 			var options = {
 				headers: { "Content-Type": file.type, "x-amz-acl": "public-read" }
 			};
-			const response = await axios.put(signedRequest, file, options);
-			console.log(response, url);
+			await axios.put(signedRequest, file, options);
+			await axiosApp.patch(
+				"/users/update-user-avatar",
+				{},
+				{ withCredentials: true }
+			);
+			props.onLogout(); // Refreshes the page so the user sees the Avatar change
 		} catch (err) {
 			console.log(err);
 			alert("There was an error uploading the file.");
@@ -160,8 +164,10 @@ function Profile(props) {
 						<img
 							onClick={toggleUploadOpen}
 							className="profile-avatar"
-							src={require("../../images/uploads/" +
-								profileData.avatar)}
+							src={
+								"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+								profileData.avatar
+							}
 							alt="profile picture"
 						/>
 						<div className="profile-name-container">
@@ -214,7 +220,7 @@ function Profile(props) {
 			</div>
 
 			<div className={"new-post-container" + (uploadOpen ? "" : " hide")}>
-				<div className="new-post upload-avatar">
+				<div className="new-post center-screen upload-avatar">
 					<h1>Upload Photo</h1>
 					<p htmlFor="avatar" className="file-chosen">
 						{selectedFile ? selectedFile.name : "No file chosen"}

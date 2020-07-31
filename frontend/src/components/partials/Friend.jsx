@@ -4,7 +4,10 @@ function Friend(props) {
 	return (
 		<li onClick={() => props.openChat(props)} className="friend">
 			<img
-				src={require("../../images/uploads/" + props.avatar)}
+				src={
+					"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+					props.avatar
+				}
 				alt="user avatar"
 			/>
 			<span>

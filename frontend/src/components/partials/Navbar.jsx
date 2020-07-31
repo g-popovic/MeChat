@@ -24,6 +24,7 @@ function Navbar(props) {
 				console.log(err);
 			}
 		}
+		window.location.reload();
 	}
 
 	return (
@@ -81,8 +82,10 @@ function Navbar(props) {
 						className="nav-avatar hide-mobile"
 						to={"/profile/" + props.myData.id}>
 						<img
-							src={require("../../images/uploads/" +
-								props.myData.avatar)}
+							src={
+								"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+								props.myData.avatar
+							}
 							alt="my profile picture"
 						/>
 					</Link>
@@ -93,12 +96,13 @@ function Navbar(props) {
 				className={
 					newPostOpen ? "new-post-container" : "new-post-container hide"
 				}>
-				<div className="new-post">
+				<div className="center-screen new-post">
 					<h1>New Post</h1>
 					<textarea
 						onChange={e => setPostContent(e.target.value)}
 						autoFocus
 						placeholder="Compose post"
+						value={postContent}
 					/>
 					<button
 						onClick={submitPost}

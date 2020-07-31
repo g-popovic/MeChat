@@ -42,7 +42,10 @@ function Post(props) {
 				<Link to={"/profile/" + props.authorId}>
 					<img
 						className="post-author-image"
-						src={require("../../images/uploads/" + props.avatar)}
+						src={
+							"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+							props.avatar
+						}
 						alt="profile picture"
 					/>
 				</Link>

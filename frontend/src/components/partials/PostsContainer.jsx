@@ -22,8 +22,10 @@ function PostsContainer(props) {
 				<h1>Feed</h1>
 				<Link to={"/profile/" + props.myData.id}>
 					<img
-						src={require("../../images/uploads/" +
-							props.myData.avatar)}
+						src={
+							"https://mechat-profile-images.s3.eu-west-2.amazonaws.com/" +
+							props.myData.avatar
+						}
 						alt="my profile picture"
 					/>
 				</Link>

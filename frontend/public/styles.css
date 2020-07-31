@@ -1152,7 +1152,7 @@ a {
 }
 
 .login-container {
-	text-align: center;
+	position: absolute;
 }
 
 .login-logo {
@@ -1353,10 +1353,10 @@ a {
 
 @keyframes Slide_Up {
 	0% {
-		transform: translateY(25rem);
+		transform: translate(-50%, 70%);
 	}
 	100% {
-		transform: translateY(0);
+		transform: translateY(-50%, -50%);
 	}
 }
 
@@ -1490,3 +1490,12 @@ a {
 }
 
 /*# sourceMappingURL=styles.css.map */
+
+.center-screen {
+	margin: 0 !important;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	position: fixed;
+}
