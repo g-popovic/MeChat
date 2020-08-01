@@ -276,13 +276,13 @@ aws.config.region = "eu-west-2";
 router.get("/sign-s3", (req, res) => {
 	const S3_BUCKET = process.env.S3_BUCKET;
 	const fileName = req.query["file-name"];
-	const fileType = req.query["file-type"];
 	const myId = req.session.myId;
 	const s3Params = {
 		Bucket: S3_BUCKET,
 		Key: myId + "-avatar.jpg",
 		Expires: 60,
-		ContentType: fileType,
+		CacheControl: "no-cache",
+		ContentType: "image/jpeg",
 		ACL: "public-read"
 	};
 

@@ -134,7 +134,11 @@ function Profile(props) {
 	async function uploadFile(file, signedRequest, url) {
 		try {
 			var options = {
-				headers: { "Content-Type": file.type, "x-amz-acl": "public-read" }
+				headers: {
+					"Content-Type": file.type,
+					"x-amz-acl": "public-read",
+					"Cache-Control": "no-cache"
+				}
 			};
 			await axios.put(signedRequest, file, options);
 			await axiosApp.patch(
