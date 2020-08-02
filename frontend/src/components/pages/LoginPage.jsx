@@ -36,6 +36,7 @@ function LoginPage(props) {
 	return (
 		<div className="login-container center-screen main-container">
 			<div className="login-logo">
+				<p>WELCOME TO</p>
 				<img src={require("../../images/assets/Logo.svg")} alt="logo" />
 			</div>
 

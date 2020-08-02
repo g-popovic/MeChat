@@ -50,7 +50,7 @@ function Navbar(props) {
 						</Link>
 					</li>
 					<li className="nav-new-post">
-						<a onClick={toggleNewPost}>
+						<a onClick={toggleNewPost} href="">
 							<img
 								src={require("../../images/assets/Mobile Bottom Nav/Add Post.svg")}
 								alt="new post button"

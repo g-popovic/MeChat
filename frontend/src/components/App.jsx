@@ -78,7 +78,7 @@ function App() {
 				<Route
 					component={() => {
 						return redirectBasedOnStatus(
-							<Redirect to="/login" />,
+							<Redirect to="/register" />,
 							<MainPage
 								loggedIn={loggedIn}
 								myData={myData}

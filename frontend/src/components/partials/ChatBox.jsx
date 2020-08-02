@@ -11,8 +11,6 @@ function ChatBox(props) {
 	const [newMessage, setNewMessage] = useState("");
 	const messagesEnd = document.getElementById("lastMessage");
 
-	const [firstScroll, setFirstScroll] = useState(0); // For determening scroll smoothness
-
 	useEffect(() => {
 		socket = io("me-chat.herokuapp.com");
 
@@ -52,6 +50,7 @@ function ChatBox(props) {
 			newMessage.split(" ").find(msg => msg.length > 15)
 		) {
 			setNewMessage("");
+			alert("Word in message too long!");
 			return;
 		}
 
@@ -87,12 +86,7 @@ function ChatBox(props) {
 	}
 
 	useEffect(() => {
-		if (firstScroll < 2) {
-			scrollToBottom("instant");
-			setFirstScroll(prev => prev + 1);
-		} else {
-			scrollToBottom("smooth");
-		}
+		scrollToBottom("instant");
 	}, [messages]);
 
 	return (

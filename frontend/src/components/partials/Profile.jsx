@@ -109,6 +109,7 @@ function Profile(props) {
 			}
 			try {
 				getSignedRequest(selectedFile);
+				toggleUploadOpen();
 			} catch (err) {
 				console.log(err);
 				setUploadOpen(false);
@@ -146,10 +147,7 @@ function Profile(props) {
 				{},
 				{ withCredentials: true }
 			);
-			props.onLogout(); // Refreshes the page so the user sees the Avatar change
-			alert(
-				"Profile photo updated! You may need to wait a minute to see the changes."
-			);
+			alert("Profile photo updated!");
 		} catch (err) {
 			console.log(err);
 			alert("There was an error uploading the file.");
